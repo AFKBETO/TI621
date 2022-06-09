@@ -10,7 +10,7 @@ public class Main {
 
         //Fonction d'arrêt du programme
         Scanner scanner = new Scanner(System.in);
-        boolean isInt = true;
+        boolean isInt = false;
         while(!isInt) {
             System.out.println("Veuillez spécifier le nombre de coureurs : ");
             isInt = scanner.hasNextInt();
@@ -28,11 +28,11 @@ public class Main {
         }
 
 
-/*        boolean course = true;
+        boolean course = true;
 
         while(course){
 
-        }*/
+        }
 
     }
 }
