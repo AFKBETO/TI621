@@ -8,17 +8,19 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        //Fonction d'arrêt du programme
+        //Entrée de la liste des coureurs
         Scanner scanner = new Scanner(System.in);
+        int nombre;
         boolean isInt = false;
         while(!isInt) {
             System.out.println("Veuillez spécifier le nombre de coureurs : ");
             isInt = scanner.hasNextInt();
             if (!isInt) {
                 System.out.println("Erreur: Il faut taper un nombre!!");
+                scanner.next();
             }
         }
-        int nombre = scanner.nextInt();
+        nombre = scanner.nextInt();
 
         List coureurs = new ArrayList<Coureur>();
 
