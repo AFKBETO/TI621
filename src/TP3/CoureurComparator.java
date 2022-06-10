@@ -9,17 +9,17 @@ public class CoureurComparator implements Comparator<Coureur> {
         if (o1.getEtat() == o2.getEtat()) {
             if (o1.getEtat() == Etat.ARRIVEE) {
                 if (o1.getTemps() < o2.getTemps()) {
-                    return 1;
+                    return -1;
                 }
                 if (o1.getTemps() > o2.getTemps()) {
-                    return -1;
+                    return 1;
                 }
             }
         } else {
-            if (o1.getEtat() == Etat.DISQUALIF) {
+            if (o1.getEtat() == Etat.DISQUALIFICATION) {
                 return 1;
             }
-            if (o2.getEtat() == Etat.DISQUALIF) {
+            if (o2.getEtat() == Etat.DISQUALIFICATION) {
                 return -1;
             }
             if (o1.getEtat() == Etat.ABANDON) {

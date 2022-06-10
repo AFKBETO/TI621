@@ -4,5 +4,5 @@ public enum Etat {
     ARRIVEE,
     ABANDON,
     ENCOURS,
-    DISQUALIF,
+    DISQUALIFICATION,
 }

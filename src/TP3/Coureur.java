@@ -48,7 +48,7 @@ public class Coureur {
     }
 
     public void disqualifier() {
-        etat = Etat.DISQUALIF;
+        etat = Etat.DISQUALIFICATION;
     }
 
     public Etat getEtat() {
