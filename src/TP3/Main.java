@@ -1,5 +1,6 @@
 package TP3;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -10,7 +11,7 @@ public class Main {
 
         //Entrée de la liste des coureurs
         Scanner scanner = new Scanner(System.in);
-        int nombre;
+        int nombre = 0;
         boolean isInt = false;
         while(!isInt) {
             System.out.println("Veuillez spécifier le nombre de coureurs : ");
@@ -37,6 +38,7 @@ public class Main {
 
         //Arrêt Programme
         String com = "";
+        int start = LocalTime.now().toSecondOfDay();
 
         while(!com.toLowerCase().equals("q")){
             System.out.println("Que voulez-vous faire ?\n" +
@@ -63,12 +65,19 @@ public class Main {
                         System.out.println("Veuillez taper un nombre!");
                         scanner.next();
                     }
-                    classement.add(coureurs.get(scanner.nextInt()));
+                    Coureur arrivee = coureurs.get(scanner.nextInt());
+                    int tempsArrive = LocalTime.now().toSecondOfDay();
+                    if (tempsArrive < start) {
+                        tempsArrive += 24 * 60* 60;
+                    }
+                    arrivee.setTemps(tempsArrive);
+
+                    classement.add(arrivee);
                     break;
             }
         }
 
-        
+
 
     }
 }
