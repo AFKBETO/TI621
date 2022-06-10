@@ -19,6 +19,9 @@ public class Coureur {
 
     public void setTemps(int temps) {
         this.temps = temps;
+        if (etat == Etat.ENCOURS) {
+            arriver();
+        }
     }
 
     public String getNom() {
