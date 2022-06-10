@@ -53,18 +53,18 @@ public class Main {
             if (compteur == nombre) {
                 System.out.println("La course est terminée ! Voici le classement final :");
                 coureurs.sort(new CoureurComparator());
-                for (Coureur coureur : coureurs) {
-                    System.out.println("Rang #" + coureur.getNumDossard() + " : " + coureur);
+                for (int i = 0; i < nombre; i++) {
+                    System.out.println("Rang #" + (i + 1) + " : " + coureurs.get(i));
                 }
-                break;
             }
             System.out.println("Que voulez-vous faire ?\n" +
                     "q : quitter le programme\n" +
+                            ((nombre != compteur) ?
                     "a : afficher tous les coureurs\n" +
                     "c : afficher le classement provisoire\n" +
                     "f : enregistrer une arrivée\n" +
                     "d : enregistrer un abandon\n" +
-                    "i : enregistrer une disqualification\n" +
+                    "i : enregistrer une disqualification\n" : "") +
                     "m : enregistrer le temps d'arrivée d'un coureur\n" +
                     "t : afficher le temps d'arrivée d'un coureur\n" +
                     "e : afficher l'écart entre deux coureurs"
@@ -79,8 +79,8 @@ public class Main {
                     break;
                 case ("c"): // Afficher le classement provisoire
                     coureurs.sort(new CoureurComparator());
-                    for (Coureur coureur : coureurs) {
-                        System.out.println("Rang #" + coureur.getNumDossard() + " : " + coureur);
+                    for (int i = 0; i < nombre; i++) {
+                        System.out.println("Rang #" + (i + 1) + " : " + coureurs.get(i));
                     }
                     break;
                 case ("f"): // Enregistrer une arrivée
