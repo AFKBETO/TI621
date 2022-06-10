@@ -16,28 +16,27 @@ public class Main {
         return null;
     }
 
+    public static int scanUntilInt(Scanner scanner) {
+        while(!scanner.hasNextInt()) {
+            System.out.println("Veuillez taper un nombre!");
+            scanner.next();
+        }
+        return scanner.nextInt();
+    }
+
     public static void main(String[] args) {
         //Entrée de la liste des coureurs
         Scanner scanner = new Scanner(System.in);
         int nombre = 0;
-        boolean isInt = false;
-        while(!isInt) {
-            System.out.println("Veuillez spécifier le nombre de coureurs : ");
-            isInt = scanner.hasNextInt();
-            if (!isInt) {
-                System.out.println("Erreur: Il faut taper un nombre!!");
-                scanner.next();
-            } else {
-                nombre = scanner.nextInt();
-                isInt = nombre != 0;
-                if (!isInt) {
-                    System.out.println("Le nombre doit être positif !");
-                }
+        System.out.println("Veuillez spécifier le nombre de coureurs : ");
+        while(nombre == 0) {
+            nombre = scanUntilInt(scanner);
+            if (nombre == 0) {
+                System.out.println("Le nombre doit être positif !");
             }
         }
 
         List<Coureur> coureurs = new ArrayList<>();
-        int nombreArrivees = 0;
 
         for (int i = 0; i < nombre; i++) {
             System.out.println("Nom du coureur #" + (i + 1) + " : ");
@@ -52,19 +51,21 @@ public class Main {
             System.out.println("Que voulez-vous faire ?\n" +
                     "q : quitter le programme\n" +
                     "a : afficher tous les coureurs\n" +
-                    "c : afficher le classement\n" +
-                    "f : enregister une arrivée\n" +
-                    "i : enregister une disqualification\n" +
-                    "t : enregister une disqualification\n"
+                    "c : afficher le classement provisoire\n" +
+                    "f : enregistrer une arrivée\n" +
+                    "d : enregistrer un abandon\n" +
+                    "i : enregistrer une disqualification\n" +
+                    "t : enregistrer le temps d'arrivée\n"
             );
             com = scanner.next().toLowerCase();
             switch (com) {
                 case ("a"): // Affichage Coureurs
+                    coureurs.sort(new DossardComparator());
                     for (Coureur coureur : coureurs) {
                         System.out.println(coureur);
                     }
                     break;
-                case ("c"): // Afficher le classement
+                case ("c"): // Afficher le classement provisoire
                     coureurs.sort(new CoureurComparator());
                     for (int i = 0; i < nombre; i++) {
                         System.out.println("Rang #" + (i+1) + " : " + coureurs.get(i));
@@ -76,17 +77,13 @@ public class Main {
                         tempsArrive += 24 * 60* 60;
                     }
                     System.out.println("Quel coureur est arrivé ? Précisez son numéro de dossard.");
-                    while(!scanner.hasNextInt()) {
-                        System.out.println("Veuillez taper un nombre!");
-                        scanner.next();
-                    }
-                    int dossard = scanner.nextInt();
-                    Coureur arrivee = search(coureurs, dossard);
+
+                    Coureur arrivee = search(coureurs, scanUntilInt(scanner));
+
                     if (arrivee != null) {
                         switch (arrivee.getEtat()){
                             case ENCOURS:
                                 arrivee.setTemps(tempsArrive);
-                                nombreArrivees++;
                                 break;
                             case ABANDON:
                                 System.out.println("Le coureur a abandonné la course !");
@@ -104,11 +101,9 @@ public class Main {
                     break;
                 case ("i"): // Enregistrer une disqualification
                     System.out.println("Quel coureur est disqualifié ? Précisez son numéro de dossard.");
-                    while(!scanner.hasNextInt()) {
-                        System.out.println("Veuillez taper un nombre!");
-                        scanner.next();
-                    }
-                    Coureur disqualif = search(coureurs, scanner.nextInt());
+
+                    Coureur disqualif = search(coureurs, scanUntilInt(scanner));
+
                     if (disqualif != null) {
                         switch (disqualif.getEtat()){
                             case ABANDON:
@@ -119,6 +114,51 @@ public class Main {
                                 break;
                             default:
                                 disqualif.disqualifier();
+                        }
+                    } else {
+                        System.out.println("Le nombre de dossard est invalide.");
+                    }
+                    break;
+                case "t":
+                    System.out.println("Le temps d'arrivée de quel coureur souhaitez-vous modifier ? Précisez son numéro de dossard.");
+
+                    Coureur modif = search(coureurs, scanUntilInt(scanner));
+
+                    if (modif != null) {
+                        switch (modif.getEtat()){
+                            case ABANDON:
+                                System.out.println("Le coureur a déjà abandonné la course !");
+                                break;
+                            case DISQUALIF:
+                                System.out.println("Le coureur est disqualifié de cette course !");
+                                break;
+                            default:
+                                System.out.println("Veuillez préciser le temps du coureur #" + modif.getNumDossard() + " en seconde :");
+                                modif.setTemps(scanUntilInt(scanner));
+                        }
+                    } else {
+                        System.out.println("Le nombre de dossard est invalide.");
+                    }
+                    break;
+                case ("d"): // Enregistrer un abandon
+                    System.out.println("Quel coureur souhaite abandonner ? Précisez son numéro de dossard.");
+
+                    Coureur abandonne = search(coureurs, scanUntilInt(scanner));
+
+                    if (abandonne != null) {
+                        switch (abandonne.getEtat()){
+                            case ENCOURS:
+                                abandonne.abandonner();
+                                break;
+                            case ABANDON:
+                                System.out.println("Le coureur a abandonné la course !");
+                                break;
+                            case ARRIVEE:
+                                System.out.println("Le coureur est déjà arrivé !");
+                                break;
+                            case DISQUALIF:
+                                System.out.println("Le coureur est disqualifié de cette course !");
+                                break;
                         }
                     } else {
                         System.out.println("Le nombre de dossard est invalide.");

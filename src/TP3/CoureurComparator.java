@@ -10,22 +10,28 @@ public class CoureurComparator implements Comparator<Coureur> {
             if (o1.getEtat() == Etat.ARRIVEE) {
                 if (o1.getTemps() < o2.getTemps()) {
                     return 1;
-                } else if (o1.getTemps() > o2.getTemps()) {
+                }
+                if (o1.getTemps() > o2.getTemps()) {
                     return -1;
                 }
             }
         } else {
             if (o1.getEtat() == Etat.DISQUALIF) {
                 return 1;
-            } else if (o2.getEtat() == Etat.DISQUALIF) {
+            }
+            if (o2.getEtat() == Etat.DISQUALIF) {
                 return -1;
-            } else if (o1.getEtat() == Etat.ABANDON) {
+            }
+            if (o1.getEtat() == Etat.ABANDON) {
                 return 1;
-            } else if (o2.getEtat() == Etat.ABANDON) {
+            }
+            if (o2.getEtat() == Etat.ABANDON) {
                 return -1;
-            } else if (o1.getEtat() == Etat.ENCOURS) {
+            }
+            if (o1.getEtat() == Etat.ENCOURS) {
                 return 1;
-            } else if (o2.getEtat() == Etat.ENCOURS) {
+            }
+            if (o2.getEtat() == Etat.ENCOURS) {
                 return -1;
             }
         }
