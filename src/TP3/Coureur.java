@@ -1,5 +1,7 @@
 package TP3;
 
+import java.time.LocalTime;
+
 public class Coureur {
     private static int COMPTEUR = 0;
     private final int numDossard;
@@ -19,6 +21,11 @@ public class Coureur {
 
     public int getTemps() {
         return temps;
+    }
+
+    public String getTempsString() {
+        LocalTime temps = LocalTime.ofSecondOfDay(this.temps);
+        return temps.toString();
     }
 
     public void setTemps(int temps) {
@@ -52,6 +59,6 @@ public class Coureur {
     public String toString() {
         return "Coureur #" + numDossard +
                 " : " + nom + ", statut : " +
-                etat + (etat == Etat.ARRIVEE ? ("temps : " + temps): "");
+                etat + (etat == Etat.ARRIVEE ? (", temps : " + getTempsString()): "");
     }
 }

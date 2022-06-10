@@ -7,8 +7,16 @@ import java.util.Scanner;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static Coureur search (List<Coureur> coureurs, int nomDossard) {
+        for (Coureur coureur : coureurs) {
+            if (coureur.getNumDossard() == nomDossard) {
+                return coureur;
+            }
+        }
+        return null;
+    }
 
+    public static void main(String[] args) {
         //Entrée de la liste des coureurs
         Scanner scanner = new Scanner(System.in);
         int nombre = 0;
@@ -61,8 +69,8 @@ public class Main {
                     }
                     break;
                 case ("f"): // Enregistrer une arrivée
-                    int tempsArrive = LocalTime.now().toSecondOfDay();
-                    if (tempsArrive < start) {
+                    int tempsArrive = LocalTime.now().toSecondOfDay() - start;
+                    if (tempsArrive < 0) {
                         tempsArrive += 24 * 60* 60;
                     }
                     System.out.println("Quel coureur est arrivé ? Précisez son numéro de dossard.");
@@ -75,13 +83,8 @@ public class Main {
                         System.out.println("Le nombre de dossard est invalide.");
                         continue;
                     }
-                    Coureur arrivee = null;
-                    for (Coureur coureur : coureurs.subList(nombreArrivees, nombre - 1)) {
-                        if (coureur.getNumDossard() == dossard) {
-                            arrivee = coureur;
-                            break;
-                        }
-                    }
+                    Coureur arrivee = search(coureurs, dossard);
+
                     switch (arrivee.getEtat()){
                         case ENCOURS:
                             arrivee.setTemps(tempsArrive);
