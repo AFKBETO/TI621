@@ -18,9 +18,14 @@ public class Main {
             if (!isInt) {
                 System.out.println("Erreur: Il faut taper un nombre!!");
                 scanner.next();
+            } else {
+                nombre = scanner.nextInt();
+                isInt = nombre != 0;
+                if (!isInt) {
+                    System.out.println("Le nombre doit être positif !");
+                }
             }
         }
-        nombre = scanner.nextInt();
 
         List<Coureur> coureurs = new ArrayList<>();
         List<Coureur> classement = new ArrayList<>();
