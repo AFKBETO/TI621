@@ -29,7 +29,7 @@ public class Main {
         }
 
         List<Coureur> coureurs = new ArrayList<>();
-        List<Coureur> classement = new ArrayList<>();
+        int nombreArrivees = 0;
 
         for (int i = 0; i < nombre; i++) {
             System.out.println("Nom du coureur #" + (i + 1) + " : ");
@@ -55,24 +55,48 @@ public class Main {
                     }
                     break;
                 case ("c"): // Afficher le classement
+                    coureurs.sort(new CoureurComparator());
                     for (int i = 0; i < nombre; i++) {
-                        System.out.println("Rang #" + (i+1) + " : " + ((i < classement.size())? classement.get(i) : "Coureur non arrivé"));
+                        System.out.println("Rang #" + (i+1) + " : " + coureurs.get(i));
                     }
                     break;
                 case ("f"): // Enregistrer une arrivée
+                    int tempsArrive = LocalTime.now().toSecondOfDay();
+                    if (tempsArrive < start) {
+                        tempsArrive += 24 * 60* 60;
+                    }
                     System.out.println("Quel coureur est arrivé ? Précisez son numéro de dossard.");
                     while(!scanner.hasNextInt()) {
                         System.out.println("Veuillez taper un nombre!");
                         scanner.next();
                     }
-                    Coureur arrivee = coureurs.get(scanner.nextInt());
-                    int tempsArrive = LocalTime.now().toSecondOfDay();
-                    if (tempsArrive < start) {
-                        tempsArrive += 24 * 60* 60;
+                    int dossard = scanner.nextInt();
+                    if (dossard > nombre) {
+                        System.out.println("Le nombre de dossard est invalide.");
+                        continue;
                     }
-                    arrivee.setTemps(tempsArrive);
-
-                    classement.add(arrivee);
+                    Coureur arrivee = null;
+                    for (Coureur coureur : coureurs.subList(nombreArrivees, nombre - 1)) {
+                        if (coureur.getNumDossard() == dossard) {
+                            arrivee = coureur;
+                            break;
+                        }
+                    }
+                    switch (arrivee.getEtat()){
+                        case ENCOURS:
+                            arrivee.setTemps(tempsArrive);
+                            nombreArrivees++;
+                            break;
+                        case ABANDON:
+                            System.out.println("Le coureur a abandonné la course !");
+                            break;
+                        case ARRIVEE:
+                            System.out.println("Le coureur est déjà arrivé !");
+                            break;
+                        case DISQUALIF:
+                            System.out.println("Le coureur est disqualifié de cette course !");
+                            break;
+                    }
                     break;
             }
         }

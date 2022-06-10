@@ -8,6 +8,10 @@ public class Coureur {
     private Etat etat = Etat.ENCOURS;
     private int temps = 0;
 
+    public int getNumDossard() {
+        return numDossard;
+    }
+
     public Coureur(final String nom) {
         this.numDossard = ++COMPTEUR;
         this.nom = nom;
@@ -46,6 +50,8 @@ public class Coureur {
 
     @Override
     public String toString() {
-        return "Coureur #" + numDossard + " : " + nom + ", statut : " + etat;
+        return "Coureur #" + numDossard +
+                " : " + nom + ", statut : " +
+                etat + (etat == Etat.ARRIVEE ? ("temps : " + temps): "");
     }
 }

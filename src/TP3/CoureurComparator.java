@@ -15,7 +15,19 @@ public class CoureurComparator implements Comparator<Coureur> {
                 }
             }
         } else {
-            
+            if (o1.getEtat() == Etat.DISQUALIF) {
+                return -1;
+            } else if (o2.getEtat() == Etat.DISQUALIF) {
+                return 1;
+            } else if (o1.getEtat() == Etat.ABANDON) {
+                return -1;
+            } else if (o2.getEtat() == Etat.ABANDON) {
+                return 1;
+            } else if (o1.getEtat() == Etat.ENCOURS) {
+                return -1;
+            } else if (o2.getEtat() == Etat.ENCOURS) {
+                return 1;
+            }
         }
         return 0;
     }
