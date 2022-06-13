@@ -71,6 +71,8 @@ public class Main {
             );
             com = scanner.next().toLowerCase();
             switch (com) {
+                case ("q"):
+                    break;
                 case ("a"): // Affichage Coureurs
                     if (compteur == nombre) {break;}
                     coureurs.sort(new DossardComparator());
@@ -247,6 +249,8 @@ public class Main {
                         System.out.println("Le nombre de dossard est invalide.");
                     }
                     break;
+                default:
+                    System.out.println("Commande invalide !");
             }
         }
 
