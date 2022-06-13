@@ -237,7 +237,7 @@ public class Main {
                                     coureur1.getNumDossard() +
                                     " et coureur#" +
                                     coureur2.getNumDossard() +
-                                    "est " + LocalTime.ofSecondOfDay(Math.abs(coureur1.getTemps() - coureur2.getTemps())));
+                                    " est " + LocalTime.ofSecondOfDay(Math.abs(coureur1.getTemps() - coureur2.getTemps())));
                         }
                     } else {
                         System.out.println("Le nombre de dossard est invalide.");
