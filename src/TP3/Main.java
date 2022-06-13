@@ -63,8 +63,8 @@ public class Main {
                     "a : afficher tous les coureurs\n" +
                     "c : afficher le classement provisoire\n" +
                     "f : enregistrer une arrivée\n" +
-                    "d : enregistrer un abandon\n" +
-                    "i : enregistrer une disqualification\n" : "") +
+                    "d : enregistrer un abandon\n" : "") +
+                    "i : enregistrer une disqualification\n" +
                     "m : enregistrer le temps d'arrivée d'un coureur\n" +
                     "t : afficher le temps d'arrivée d'un coureur\n" +
                     "e : afficher l'écart entre deux coureurs"
@@ -72,18 +72,21 @@ public class Main {
             com = scanner.next().toLowerCase();
             switch (com) {
                 case ("a"): // Affichage Coureurs
+                    if (compteur == nombre) {break;}
                     coureurs.sort(new DossardComparator());
                     for (Coureur coureur : coureurs) {
                         System.out.println(coureur);
                     }
                     break;
                 case ("c"): // Afficher le classement provisoire
+                    if (compteur == nombre) {break;}
                     coureurs.sort(new CoureurComparator());
                     for (int i = 0; i < nombre; i++) {
                         System.out.println("Rang #" + (i + 1) + " : " + coureurs.get(i));
                     }
                     break;
                 case ("f"): // Enregistrer une arrivée
+                    if (compteur == nombre) {break;}
                     int tempsArrive = LocalTime.now().toSecondOfDay() - start;
                     if (tempsArrive < 0) {
                         tempsArrive += 24 * 60* 60;
@@ -157,6 +160,7 @@ public class Main {
                     }
                     break;
                 case ("d"): // Enregistrer une abandon
+                    if (compteur == nombre) {break;}
                     System.out.println("Quel coureur souhaite abandonner ? Précisez son numéro de dossard.");
 
                     recherche = search(coureurs, scanUntilInt(scanner));
