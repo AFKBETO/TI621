@@ -10,13 +10,13 @@ public class Coureur {
     private Etat etat = Etat.ENCOURS;
     private int temps = 0;
 
-    public int getNumDossard() {
-        return numDossard;
-    }
-
     public Coureur(final String nom) {
         this.numDossard = ++COMPTEUR;
         this.nom = nom;
+    }
+
+    public int getNumDossard() {
+        return numDossard;
     }
 
     public int getTemps() {
@@ -44,11 +44,11 @@ public class Coureur {
     }
 
     public void arriver() {
-        etat = Etat.ARRIVEE;
+        etat = Etat.ARRIVE;
     }
 
     public void disqualifier() {
-        etat = Etat.DISQUALIFICATION;
+        etat = Etat.DISQUALIFIE;
     }
 
     public Etat getEtat() {
@@ -59,6 +59,6 @@ public class Coureur {
     public String toString() {
         return "Coureur #" + numDossard +
                 " : " + nom + ", statut : " +
-                etat + (etat == Etat.ARRIVEE ? (", temps : " + getTempsString()): "");
+                etat + (etat == Etat.ARRIVE ? (", temps : " + getTempsString()): "");
     }
 }

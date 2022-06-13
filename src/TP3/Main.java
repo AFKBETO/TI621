@@ -101,10 +101,10 @@ public class Main {
                             case ABANDON:
                                 System.out.println("Le coureur a abandonné la course !");
                                 break;
-                            case ARRIVEE:
+                            case ARRIVE:
                                 System.out.println("Le coureur est déjà arrivé !");
                                 break;
-                            case DISQUALIFICATION:
+                            case DISQUALIFIE:
                                 System.out.println("Le coureur est disqualifié de cette course !");
                                 break;
                         }
@@ -122,7 +122,7 @@ public class Main {
                             case ABANDON:
                                 System.out.println("Le coureur a déjà abandonné la course !");
                                 break;
-                            case DISQUALIFICATION:
+                            case DISQUALIFIE:
                                 System.out.println("Le coureur a déjà été disqualifié de cette course !");
                                 break;
                             default:
@@ -143,12 +143,12 @@ public class Main {
                             case ABANDON:
                                 System.out.println("Le coureur a déjà abandonné la course !");
                                 break;
-                            case DISQUALIFICATION:
+                            case DISQUALIFIE:
                                 System.out.println("Le coureur est disqualifié de cette course !");
                                 break;
                             case ENCOURS:
                                 compteur++;
-                            case ARRIVEE:
+                            case ARRIVE:
                                 System.out.println("Veuillez préciser le temps du coureur #" + recherche.getNumDossard() + " en seconde :");
                                 recherche.setTemps(scanUntilInt(scanner));
                         }
@@ -170,10 +170,10 @@ public class Main {
                             case ABANDON:
                                 System.out.println("Le coureur a abandonné la course !");
                                 break;
-                            case ARRIVEE:
+                            case ARRIVE:
                                 System.out.println("Le coureur est déjà arrivé !");
                                 break;
-                            case DISQUALIFICATION:
+                            case DISQUALIFIE:
                                 System.out.println("Le coureur est disqualifié de cette course !");
                                 break;
                         }
@@ -198,10 +198,10 @@ public class Main {
                             case ABANDON:
                                 System.out.println("Le coureur a déjà abandonné la course !");
                                 break;
-                            case DISQUALIFICATION:
+                            case DISQUALIFIE:
                                 System.out.println("Le coureur est disqualifié de cette course !");
                                 break;
-                            case ARRIVEE:
+                            case ARRIVE:
                                 System.out.println("Le temps du coureur#" + recherche.getNumDossard() + " : " + recherche.getTempsString());
                         }
                     } else {
@@ -216,7 +216,7 @@ public class Main {
                     Coureur coureur2 = search(coureurs, scanUntilInt(scanner));
 
                     if (coureur1 != null && coureur2 != null) {
-                        if (coureur1.getEtat() == Etat.DISQUALIFICATION || coureur2.getEtat() == Etat.DISQUALIFICATION || coureur1.getEtat() == Etat.ABANDON || coureur2.getEtat() == Etat.ABANDON) {
+                        if (coureur1.getEtat() == Etat.DISQUALIFIE || coureur2.getEtat() == Etat.DISQUALIFIE || coureur1.getEtat() == Etat.ABANDON || coureur2.getEtat() == Etat.ABANDON) {
                             System.out.println("Au moins un coureur a quitté la course !");
                         } else if (coureur1.getEtat() == coureur2.getEtat() && coureur1.getEtat() == Etat.ENCOURS) {
                             System.out.println("Les deux coureurs sont encore en course !");

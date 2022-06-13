@@ -1,8 +1,8 @@
 package TP3;
 
 public enum Etat {
-    ARRIVEE,
+    ARRIVE,
     ABANDON,
     ENCOURS,
-    DISQUALIFICATION,
+    DISQUALIFIE,
 }
