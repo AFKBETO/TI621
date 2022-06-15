@@ -21,12 +21,12 @@ public class Main {
 
             //Insert Document
             Document doc1 = new Document("DocumentTest", "2022-06-21", "izguehf");
-            System.out.println(doc1.toSQL());
-            statement.execute(doc1.toSQL());
+            System.out.println(doc1.toSql());
+            statement.execute(doc1.toSql());
 
             ResultSet resultSet = statement.executeQuery("SELECT * FROM document;");
             while (resultSet.next()) {
-                System.out.println(resultSet.getInt(1));
+                System.out.println(resultSet.getString("DocumentDate"));
             }
             con.close();
         } catch (Exception e) {

@@ -67,6 +67,6 @@ public class Document {
         return new TreeSet<>(tags);
     }
     public String toSql(){
-        return "INSERT INTO document(Documentname,DocumentDate,StorageAddress) VALUES ('" +this.DocumentName+"','"+this.DocumentDate+"','"+this.StorageAddress+"');";
+        return "INSERT INTO document(Documentname,DocumentDate,StorageAddress,TopicID,CategoryID) VALUES ('" +this.DocumentName+"','"+this.DocumentDate+"','"+this.StorageAddress+"',1,1);";
     }
 }
