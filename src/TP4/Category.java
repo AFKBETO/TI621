@@ -6,4 +6,12 @@ public class Category {
     public Category(final String name) {
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String toSQLInsert() {
+        return "INSERT IGNORE INTO Category(name) VALUES (\"" + name + "\");";
+    }
 }

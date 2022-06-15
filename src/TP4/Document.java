@@ -1,15 +1,23 @@
 package TP4;
 
+import java.util.TreeSet;
+import java.util.Date;
+import java.util.Set;
+
 public class Document {
 
     private String DocumentName;
-    private String DocumentDate;
+    private Date DocumentDate;
     private String StorageAddress;
+    private Category category;
+    private Topic topic;
+    private final Set<Tag> tags;
 
-    public Document(String documentName, String documentDate, String storageAddress) {
+    public Document(String documentName, Date documentDate, String storageAddress) {
         this.DocumentName = documentName;
         this.DocumentDate = documentDate;
         this.StorageAddress = storageAddress;
+        tags = new TreeSet<>();
     }
 
     public String getDocumentName() {
@@ -20,12 +28,12 @@ public class Document {
         this.DocumentName = documentName;
     }
 
-    public String getDocumentDate() {
-        return DocumentDate;
+    public Date getDocumentDate() {
+        return new Date(DocumentDate.getTime());
     }
 
-    public void setDocumentDate(String documentDate) {
-        this.DocumentDate = documentDate;
+    public void setDocumentDate(Date documentDate) {
+        this.DocumentDate = new Date(documentDate.getTime());
     }
 
     public String getStorageAddress() {
@@ -36,9 +44,27 @@ public class Document {
         this.StorageAddress = storageAddress;
     }
 
-    public String toSQL() {
-        return "INSERT INTO Document(DocumentName, DocumentDate, StorageAddress) VALUES ('"
-                + this.DocumentName + "','" + this.DocumentDate + "','" + this.StorageAddress + "');";
+    public Category getCategory() {
+        return category;
     }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+    }
+
+    public Set<Tag> getTags() {
+        return new TreeSet<>(tags);
+    }
 }
