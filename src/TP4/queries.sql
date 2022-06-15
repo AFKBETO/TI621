@@ -46,4 +46,6 @@ CREATE TABLE Possede(
 
 # Insertion dans les tables --
 
+INSERT INTO Category VALUE ("policy"), ("report"), ("receipt"), ("order");
 
+INSERT INTO Topic VALUE ("Subvention ArtEfrei 2022 - 2023"), ("Statut ArtEfrei 2022"), ("Plaquette Partenariat ArtEfrei"), ("Dossier Sweat Art'Efrei");
