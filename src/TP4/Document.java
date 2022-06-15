@@ -1,19 +1,18 @@
 package TP4;
 
 import java.util.TreeSet;
-import java.util.Date;
 import java.util.Set;
 
 public class Document {
 
     private String DocumentName;
-    private Date DocumentDate;
+    private String DocumentDate;
     private String StorageAddress;
     private Category category;
     private Topic topic;
     private final Set<Tag> tags;
 
-    public Document(String documentName, Date documentDate, String storageAddress) {
+    public Document(String documentName, String documentDate, String storageAddress) {
         this.DocumentName = documentName;
         this.DocumentDate = documentDate;
         this.StorageAddress = storageAddress;
@@ -28,12 +27,12 @@ public class Document {
         this.DocumentName = documentName;
     }
 
-    public Date getDocumentDate() {
-        return new Date(DocumentDate.getTime());
+    public String getDocumentDate() {
+        return DocumentDate;
     }
 
-    public void setDocumentDate(Date documentDate) {
-        this.DocumentDate = new Date(documentDate.getTime());
+    public void setDocumentDate(String documentDate) {
+        this.DocumentDate = documentDate;
     }
 
     public String getStorageAddress() {
@@ -66,5 +65,8 @@ public class Document {
 
     public Set<Tag> getTags() {
         return new TreeSet<>(tags);
+    }
+    public String toSql(){
+        return "INSERT INTO document(Documentname,DocumentDate,StorageAddress) VALUES ('" +this.DocumentName+"','"+this.DocumentDate+"','"+this.StorageAddress+"');";
     }
 }
