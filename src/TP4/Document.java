@@ -5,42 +5,42 @@ import java.util.Set;
 
 public class Document {
 
-    private String DocumentName;
-    private String DocumentDate;
-    private String StorageAddress;
+    private String documentName;
+    private String documentDate;
+    private String storageAddress;
     private Category category;
     private Topic topic;
     private final Set<Tag> tags;
 
     public Document(String documentName, String documentDate, String storageAddress) {
-        this.DocumentName = documentName;
-        this.DocumentDate = documentDate;
-        this.StorageAddress = storageAddress;
+        this.documentName = documentName;
+        this.documentDate = documentDate;
+        this.storageAddress = storageAddress;
         tags = new TreeSet<>();
     }
 
     public String getDocumentName() {
-        return DocumentName;
+        return documentName;
     }
 
     public void setDocumentName(String documentName) {
-        this.DocumentName = documentName;
+        this.documentName = documentName;
     }
 
     public String getDocumentDate() {
-        return DocumentDate;
+        return documentDate;
     }
 
     public void setDocumentDate(String documentDate) {
-        this.DocumentDate = documentDate;
+        this.documentDate = documentDate;
     }
 
     public String getStorageAddress() {
-        return StorageAddress;
+        return storageAddress;
     }
 
     public void setStorageAddress(String storageAddress) {
-        this.StorageAddress = storageAddress;
+        this.storageAddress = storageAddress;
     }
 
     public Category getCategory() {
@@ -67,6 +67,6 @@ public class Document {
         return new TreeSet<>(tags);
     }
     public String toSql(){
-        return "INSERT INTO document(Documentname,DocumentDate,StorageAddress) VALUES ('" +this.DocumentName+"','"+this.DocumentDate+"','"+this.StorageAddress+"');";
+        return "INSERT INTO document(Documentname,DocumentDate,StorageAddress) VALUES ('" +this.documentName +"','"+this.documentDate +"','"+this.storageAddress +"');";
     }
 }
