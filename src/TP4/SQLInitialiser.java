@@ -20,7 +20,7 @@ public class SQLInitialiser {
     }
 
     private SQLInitialiser() throws FileNotFoundException {
-        File file = new File("src/TP4/queries.sql");
+        File file = new File("src/TP4/initialiser.sql");
         Scanner sc = new Scanner(file);
         sc.useDelimiter(";|--|$");
         String query;

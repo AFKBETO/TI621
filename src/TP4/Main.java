@@ -1,6 +1,5 @@
 package TP4;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.Scanner;
 
