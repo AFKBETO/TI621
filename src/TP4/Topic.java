@@ -6,4 +6,12 @@ public class Topic {
     public Topic(final String topic) {
         this.topic = topic;
     }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public String toSQLInsert() {
+        return "INSERT IGNORE INTO Topic(topic) VALUES (\"" + topic + "\");";
+    }
 }
