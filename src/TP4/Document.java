@@ -4,19 +4,25 @@ import java.util.TreeSet;
 import java.util.Set;
 
 public class Document {
-
+    private final int documentID;
     private String documentName;
     private String documentDate;
     private String storageAddress;
     private Category category;
     private Topic topic;
     private final Set<Tag> tags;
+    private static int COMPTEUR = 0;
 
     public Document(String documentName, String documentDate, String storageAddress) {
+        this.documentID = ++COMPTEUR;
         this.documentName = documentName;
         this.documentDate = documentDate;
         this.storageAddress = storageAddress;
         tags = new TreeSet<>();
+    }
+
+    public int getDocumentID() {
+        return documentID;
     }
 
     public String getDocumentName() {
