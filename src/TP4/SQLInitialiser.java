@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 
-public class Autopopulate {
+public class SQLInitialiser {
     private List<String> queries = new ArrayList<>();
-    private static Autopopulate autopopulate = new Autopopulate();
+    private static SQLInitialiser instance = new SQLInitialiser();
 
-    private Autopopulate() {
+    private SQLInitialiser() {
         queries.add("CREATE DATABASE IF NOT EXISTS tp4;");
         queries.add("USE tp4;");
         queries.add("DROP TABLE IF EXISTS Category, Topic, Tag, Document;");
@@ -30,7 +30,7 @@ public class Autopopulate {
 
     public static boolean run(Statement statement) throws SQLException {
         if (!statement.isClosed()) {
-            for (String query : autopopulate.queries) {
+            for (String query : instance.queries) {
                 System.out.println("Executer " + query);
                 statement.execute(query);
             }

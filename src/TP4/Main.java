@@ -16,7 +16,7 @@ public class Main {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", user, password);
             Statement statement = con.createStatement();
             System.out.println("Base de données connectée !");
-            Autopopulate.run(statement);
+            SQLInitialiser.run(statement);
             ResultSet resultSet = statement.executeQuery("SELECT * FROM document;");
             while (resultSet.next()) {
                 System.out.println(resultSet.getInt(1));
