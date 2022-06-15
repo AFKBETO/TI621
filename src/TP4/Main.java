@@ -8,8 +8,11 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nom d'utilisateur : ");
         String user = sc.next();
-        System.out.println("Mot de passe : ");
+        System.out.println("Mot de passe (0 si vide) : ");
         String password = sc.next();
+        if (password == "0") {
+            password = "";
+        }
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
