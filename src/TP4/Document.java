@@ -22,11 +22,11 @@ public class Document {
     }
 
     public Date getDocumentDate() {
-        return DocumentDate;
+        return new Date(DocumentDate.getTime());
     }
 
     public void setDocumentDate(Date documentDate) {
-        this.DocumentDate = documentDate;
+        this.DocumentDate = new Date(documentDate.getTime());
     }
 
     public String getStorageAddress() {
