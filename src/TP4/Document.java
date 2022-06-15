@@ -1,13 +1,12 @@
 package TP4;
 
-import java.util.Date;
-
 public class Document {
 
     private String DocumentName;
-    private Date DocumentDate;
+    private String DocumentDate;
     private String StorageAddress;
-   public Document(String documentName, Date documentDate, String storageAddress) {
+
+    public Document(String documentName, String documentDate, String storageAddress) {
         this.DocumentName = documentName;
         this.DocumentDate = documentDate;
         this.StorageAddress = storageAddress;
@@ -21,11 +20,11 @@ public class Document {
         this.DocumentName = documentName;
     }
 
-    public Date getDocumentDate() {
+    public String getDocumentDate() {
         return DocumentDate;
     }
 
-    public void setDocumentDate(Date documentDate) {
+    public void setDocumentDate(String documentDate) {
         this.DocumentDate = documentDate;
     }
 
@@ -35,6 +34,11 @@ public class Document {
 
     public void setStorageAddress(String storageAddress) {
         this.StorageAddress = storageAddress;
+    }
+
+    public String toSQL() {
+        return "INSERT INTO Document(DocumentName, DocumentDate, StorageAddress) VALUES ('"
+                + this.DocumentName + "','" + this.DocumentDate + "','" + this.StorageAddress + "');";
     }
 
 }

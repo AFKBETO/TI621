@@ -18,6 +18,12 @@ public class Main {
             Statement statement = con.createStatement();
             System.out.println("Base de données connectée !");
             SQLInitialiser.run(statement);
+
+            //Insert Document
+            Document doc1 = new Document("DocumentTest", "2022-06-21", "izguehf");
+            System.out.println(doc1.toSQL());
+            statement.execute(doc1.toSQL());
+
             ResultSet resultSet = statement.executeQuery("SELECT * FROM document;");
             while (resultSet.next()) {
                 System.out.println(resultSet.getInt(1));
@@ -26,5 +32,8 @@ public class Main {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+
+
     }
 }
