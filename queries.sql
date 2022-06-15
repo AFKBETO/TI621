@@ -41,3 +41,8 @@ CREATE TABLE possède(
                         FOREIGN KEY(DocumentID) REFERENCES Document(DocumentID),
                         FOREIGN KEY(TagID) REFERENCES Tag(TagID)
 );
+
+
+-- Insertion dans les tables --
+
+

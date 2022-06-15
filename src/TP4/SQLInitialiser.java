@@ -11,7 +11,7 @@ public class SQLInitialiser {
     private SQLInitialiser() {
         queries.add("CREATE DATABASE IF NOT EXISTS tp4;");
         queries.add("USE tp4;");
-        queries.add("DROP TABLE IF EXISTS Category, Topic, Tag, Document;");
+        queries.add("DROP TABLE IF EXISTS Possede, Document, Category, Topic, Tag;");
         queries.add("CREATE TABLE Category(CategoryID INT auto_increment, Name VARCHAR(50), PRIMARY KEY(CategoryID));");
         queries.add("CREATE TABLE Topic(TopicID INT auto_increment, Topic VARCHAR(50), PRIMARY KEY(TopicID));");
         queries.add("CREATE TABLE Tag(TagID INT auto_increment, Tag VARCHAR(50), PRIMARY KEY(TagID));");
@@ -25,6 +25,13 @@ public class SQLInitialiser {
                 "PRIMARY KEY(DocumentID), " +
                 "FOREIGN KEY(TopicID) REFERENCES Topic(TopicID), " +
                 "FOREIGN KEY(CategoryID) REFERENCES Category(CategoryID)" +
+                ");");
+        queries.add("CREATE TABLE possede(" +
+                "   DocumentID INT," +
+                "   TagID INT," +
+                "   PRIMARY KEY(DocumentID, TagID)," +
+                "   FOREIGN KEY(DocumentID) REFERENCES Document(DocumentID)," +
+                "   FOREIGN KEY(TagID) REFERENCES Tag(TagID)" +
                 ");");
     }
 
