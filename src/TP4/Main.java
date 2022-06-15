@@ -1,5 +1,6 @@
 package TP4;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -8,11 +9,9 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nom d'utilisateur : ");
         String user = sc.next();
-        System.out.println("Mot de passe (0 si vide) : ");
-        String password = sc.next();
-        if (password == "0") {
-            password = "";
-        }
+        sc.nextLine();
+        System.out.println("Mot de passe : ");
+        String password = sc.nextLine();
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
