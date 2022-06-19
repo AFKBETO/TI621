@@ -9,9 +9,9 @@ public class Document {
     private String documentName;
     private String documentDate;
     private String storageAddress;
-    private Category category;
-    private Topic topic;
-    private final Set<Tag> tags;
+    private String category;
+    private String topic;
+    private final Set<String> tags;
     private static int COMPTEUR = 0;
 
     public Document(String documentName, String documentDate, String storageAddress) {
@@ -50,23 +50,23 @@ public class Document {
         this.storageAddress = storageAddress;
     }
 
-    public Category getCategory() {
-        return new Category(category.getName());
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
-    public Topic getTopic() {
-        return new Topic(topic.getTopic());
+    public String getTopic() {
+        return topic;
     }
 
-    public void setTopic(Topic topic) {
+    public void setTopic(String topic) {
         this.topic = topic;
     }
 
-    public void addTag(Tag tag) {
+    public void addTag(String tag) {
         tags.add(tag);
     }
 
@@ -74,18 +74,18 @@ public class Document {
         tags.remove(tag);
     }
 
-    public Set<Tag> getTags() {
-        return new TreeSet<>(tags);
+    public Set<String> getTags() {
+        return new TreeSet<String>(tags);
     }
 
     public void insert(Statement statement) throws SQLException {
-        int catKey = category.getKey(statement);
-        int topicKey = topic.getKey(statement);
+        int catKey = Category.getKey(statement, category);
+        int topicKey = Topic.getKey(statement, topic);
         statement.execute("INSERT INTO Document(DocumentId, Documentname,DocumentDate,StorageAddress,CategoryId,TopicId) VALUES ('" +
                 documentID + "','" + documentName +"','" + documentDate +"','" + storageAddress + "'," + catKey + "," + topicKey +");");
         StringBuilder sqlString = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
-        for (Tag tag: tags) {
-            int tagKey = tag.getKey(statement);
+        for (String tag: tags) {
+            int tagKey = Tag.getKey(statement, tag);
             sqlString.append("(" + documentID + "," + tagKey + "),");
         }
         sqlString.deleteCharAt(sqlString.length() - 1);

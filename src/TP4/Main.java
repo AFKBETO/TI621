@@ -20,11 +20,20 @@ public class Main {
             SQLInitialiser.run(statement);
 
             //Insert Document
-            Document doc1 = new Document("Demande difficile", "2022-06-17", "C:/Users//ArtEfrei/Subvention.pdf");
-            doc1.setCategory(new Category("policy"));
-            doc1.setTopic(new Topic("Statut ArtEfrei 2022"));
-            doc1.addTag(new Tag("Association"));
-            doc1.insert(statement);
+            Document doc = new Document("Demande difficile", "2022-06-17", "C:/Users/ArtEfrei/Subvention.pdf");
+            doc.setCategory("report");
+            doc.setTopic("Subvention ArtEfrei 2022");
+            doc.addTag("Association");
+            doc.insert(statement);
+
+            doc = new Document("Le rêve artistique", "2022-06-28", "C:/Users/ArtEfrei/Plaquette.pdf");
+            doc.setCategory("report");
+            doc.setTopic("Plaquette Partenariat ArtEfrei");
+            doc.addTag("Association");
+            doc.addTag("Etude");
+            doc.addTag("Divertissement");
+            doc.insert(statement);
+
 
             con.close();
         } catch (Exception e) {

@@ -1,20 +1,17 @@
 package TP4;
 
 import java.sql.*;
-import java.util.Objects;
 
-public class Category implements Comparable {
-    private final String name;
-
-    public Category(final String name) {
-        this.name = name;
+public class Category {
+    public static String getName(final Statement statement, final int key) throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT name FROM category WHERE categoryID = '" + key + "' LIMIT 1");
+        if (!resultSet.next()) {
+            throw new SQLException("categoryId introuvable");
+        }
+        return resultSet.getString(1);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getKey(Statement statement) throws SQLException {
+    public static int getKey(final Statement statement, final String name) throws SQLException {
         ResultSet resultSet = statement.executeQuery("SELECT CategoryId FROM category WHERE Name = '" + name + "' LIMIT 1");
         if (!resultSet.next()) {
             statement.execute("INSERT INTO Category(name) VALUES (\"" + name + "\");");
@@ -22,11 +19,5 @@ public class Category implements Comparable {
             resultSet.next();
         }
         return resultSet.getInt(1);
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        Category category1 = (Category) o;
-        return getName().compareTo(category1.getName());
     }
 }
