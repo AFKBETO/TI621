@@ -7,7 +7,7 @@ import java.util.Set;
 public class Document {
     private final int documentID;
     private String documentName;
-    private String documentDate;
+    private String documentDate = null;
     private String storageAddress;
     private String category;
     private String topic;
@@ -77,7 +77,7 @@ public class Document {
         tags.add(tag);
     }
 
-    public void deleteTag(Tag tag) {
+    public void deleteTag(String tag) {
         tags.remove(tag);
     }
 
@@ -85,18 +85,41 @@ public class Document {
         return new TreeSet<String>(tags);
     }
 
-    public void insert(Statement statement) throws SQLException {
+    public void sync(Statement statement) throws SQLException {
         int catKey = Category.getKey(statement, category);
         int topicKey = Topic.getKey(statement, topic);
-        statement.execute("INSERT INTO Document(DocumentId, Documentname,DocumentDate,StorageAddress,CategoryId,TopicId) VALUES ('" +
-                documentID + "','" + documentName +"','" + documentDate +"','" + storageAddress + "'," + catKey + "," + topicKey +");");
-        StringBuilder sqlString = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
+        Set<String> tagList = new TreeSet<>();
+
+        statement.execute("INSERT INTO Document(DocumentId,Documentname,"+ ((documentDate != null) ? "DocumentDate," : "") +
+                "StorageAddress,CategoryId,TopicId) VALUES ('" + documentID + "','" + documentName +
+                ((documentDate != null) ? ("','" + documentDate) : "") +"','" + storageAddress + "'," + catKey +
+                "," + topicKey + ") ON DUPLICATE KEY UPDATE " + "Documentname = '" + documentName +
+                ((documentDate != null) ? "',DocumentDate = '" + documentDate : "") +
+                "',StorageAddress = '" + storageAddress + "',CategoryId = " + catKey + ",TopicId = " + topicKey + ";");
+
+        ResultSet rS = statement.executeQuery("SELECT Tag FROM Possede JOIN Tag USING (TagId) WHERE DocumentId = " + documentID + ";");
+        StringBuilder sqlQuery = new StringBuilder();
+        while (rS.next()) {
+            String tagDB = rS.getString("Tag");
+            if (!tags.contains(tagDB)) {
+                sqlQuery.append(tagDB + "', '");
+            }
+            tagList.add(tagDB);
+        }
+        if (sqlQuery.length() > 0) {
+            sqlQuery.delete(sqlQuery.length() - 4, sqlQuery.length());
+            sqlQuery.insert(0, "DELETE FROM Possede WHERE DocumentID = " + documentID + " AND TagID IN (" +
+                    "SELECT TagId FROM Tag WHERE Tag IN ('");
+            sqlQuery.append("'));");
+            statement.execute(sqlQuery.toString());
+        }
+        sqlQuery = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
         for (String tag: tags) {
             int tagKey = Tag.getKey(statement, tag);
-            sqlString.append("(" + documentID + "," + tagKey + "),");
+            sqlQuery.append("(" + documentID + "," + tagKey + "),");
         }
-        sqlString.deleteCharAt(sqlString.length() - 1);
-        sqlString.append(";");
-        statement.execute(sqlString.toString());
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+        sqlQuery.append(";");
+        statement.execute(sqlQuery.toString());
     }
 }
