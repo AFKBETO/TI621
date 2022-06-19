@@ -20,13 +20,12 @@ public class Main {
             SQLInitialiser.run(statement);
 
             //Insert Document
-            Document doc1 = new Document("DocumentTest", "2022-06-21", "izguehf");
-            doc1.setCategory(new Category("A new category"));
-            doc1.setTopic(new Topic("A new topic"));
-            doc1.addTag(new Tag("Tag1"));
-            doc1.addTag(new Tag("Tag2"));
+            Document doc1 = new Document("Demande difficile", "2022-06-17", "C:/Users//ArtEfrei/Subvention.pdf");
+            doc1.setCategory(new Category("policy"));
+            doc1.setTopic(new Topic("Statut ArtEfrei 2022"));
+            doc1.addTag(new Tag("Association"));
             doc1.insert(statement);
-            
+
             con.close();
         } catch (Exception e) {
             System.out.println(e);

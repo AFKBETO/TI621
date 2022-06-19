@@ -1,8 +1,6 @@
 package TP4;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Objects;
 
 public class Topic implements Comparable {
