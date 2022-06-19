@@ -21,13 +21,12 @@ public class Main {
 
             //Insert Document
             Document doc1 = new Document("DocumentTest", "2022-06-21", "izguehf");
-            System.out.println(doc1.toSql());
-            statement.execute(doc1.toSql());
-
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM document;");
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString("DocumentDate"));
-            }
+            doc1.setCategory(new Category("A new category"));
+            doc1.setTopic(new Topic("A new topic"));
+            doc1.addTag(new Tag("Tag1"));
+            doc1.addTag(new Tag("Tag2"));
+            doc1.insert(statement);
+            
             con.close();
         } catch (Exception e) {
             System.out.println(e);

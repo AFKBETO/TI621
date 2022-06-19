@@ -1,5 +1,6 @@
 package TP4;
 
+import java.sql.*;
 import java.util.TreeSet;
 import java.util.Set;
 
@@ -69,10 +70,26 @@ public class Document {
         tags.add(tag);
     }
 
+    public void deleteTag(Tag tag) {
+        tags.remove(tag);
+    }
+
     public Set<Tag> getTags() {
         return new TreeSet<>(tags);
     }
-    public String toSql(){
-        return "INSERT INTO document(Documentname,DocumentDate,StorageAddress) VALUES ('" +this.documentName +"','"+this.documentDate +"','"+this.storageAddress +"');";
+
+    public void insert(Statement statement) throws SQLException {
+        int catKey = category.getKey(statement);
+        int topicKey = topic.getKey(statement);
+        statement.execute("INSERT INTO Document(DocumentId, Documentname,DocumentDate,StorageAddress,CategoryId,TopicId) VALUES ('" +
+                documentID + "','" + documentName +"','" + documentDate +"','" + storageAddress + "'," + catKey + "," + topicKey +");");
+        StringBuilder sqlString = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
+        for (Tag tag: tags) {
+            int tagKey = tag.getKey(statement);
+            sqlString.append("(" + documentID + "," + tagKey + "),");
+        }
+        sqlString.deleteCharAt(sqlString.length() - 1);
+        sqlString.append(";");
+        statement.execute(sqlString.toString());
     }
 }
