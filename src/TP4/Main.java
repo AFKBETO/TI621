@@ -16,7 +16,7 @@ public class Main {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", user, password);
             Statement statement = con.createStatement();
-            System.out.println("Base de données connectée !");
+            System.out.println("Base de donnees connectee !");
             SQLInitialiser.run(statement);
 
             //Insert Document
@@ -26,7 +26,7 @@ public class Main {
             doc.addTag("Association");
             doc.insert(statement);
 
-            doc = new Document("Le rêve artistique", "2022-06-28", "C:/Users/ArtEfrei/Plaquette.pdf");
+            doc = new Document("Le reve artistique", "2022-06-28", "C:/Users/ArtEfrei/Plaquette.pdf");
             doc.setCategory("report");
             doc.setTopic("Plaquette Partenariat ArtEfrei");
             doc.addTag("Association");
@@ -41,8 +41,8 @@ public class Main {
             doc.addTag("Divertissement");
             doc.insert(statement);
 
-            doc = new Document("Demande facile", "2022-06-10", "C:/Users/ArtEfrei/Subvention2.pdf");
-            doc.setCategory("report");
+            doc = new Document("Changement de tableau", "2022-08-22", "C:/Users/ArtEfrei/SubChange.pdf");
+            doc.setCategory("receipt");
             doc.setTopic("Subvention ArtEfrei 2022");
             doc.addTag("Association");
             doc.insert(statement);
@@ -54,14 +54,36 @@ public class Main {
             doc.addTag("Regle");
             doc.insert(statement);
 
-            ResultSet resultSet = statement.executeQuery("select count(*) as NbTopicTimes, Topic from Document \n" +
+
+            System.out.println("\nExo B.i : ");
+            ResultSet rS = statement.executeQuery("select DocumentName, Name as Category, Topic, Tag from Document \n" +
+                    "join Category using(CategoryID)\n" +
+                    "join Topic using(TopicID)\n" +
+                    "join Possede using(DocumentID)\n" +
+                    "join Tag using(TagID)\n" +
+                    "group by DocumentName;");
+
+            while (rS.next()) {
+                System.out.println(rS.getString(1) + " : Category='" + rS.getString(2) + "', Topic='" + rS.getString(3) + "', Tag='" + rS.getString(4) + "'");
+            }
+
+            System.out.println("\nExo B.ii : ");
+            rS = statement.executeQuery("select count(*) as NbTopicTimes, Topic from Document \n" +
                     "join Topic using(TopicID)\n" +
                     "group by Topic\n" +
                     "order by NbTopicTimes desc\n" +
                     "limit 1;");
-            resultSet.next();
-            System.out.println("Topic = " + resultSet.getString(2) + ", NbTopicTimes = " + resultSet.getInt(1));
+            rS.next();
+            System.out.println("Topic = '" + rS.getString(2) + "', NbTopicTimes = " + rS.getInt(1));
 
+            System.out.println("\nExo B.iii : ");
+            rS = statement.executeQuery("select Tag, count(Tag) as NbOccurrenceTag from Possede\n" +
+                    "join Tag using(TagID)\n" +
+                    "group by Tag\n" +
+                    "order by NbOccurrenceTag;");
+            while (rS.next()) {
+                System.out.println(rS.getString(1) + " : compteur=" + rS.getInt(2));
+            }
 
             con.close();
         } catch (Exception e) {
