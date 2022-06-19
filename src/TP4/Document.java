@@ -51,7 +51,7 @@ public class Document {
     }
 
     public Category getCategory() {
-        return category;
+        return new Category(category.getName());
     }
 
     public void setCategory(Category category) {
@@ -59,7 +59,7 @@ public class Document {
     }
 
     public Topic getTopic() {
-        return topic;
+        return new Topic(topic.getTopic());
     }
 
     public void setTopic(Topic topic) {
