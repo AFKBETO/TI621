@@ -34,6 +34,34 @@ public class Main {
             doc.addTag("Divertissement");
             doc.insert(statement);
 
+            doc = new Document("De beaux pulls", "2022-08-12", "C:/Users/ArtEfrei/Pulls.pdf");
+            doc.setCategory("order");
+            doc.setTopic("Dossier Sweat ArtEfrei");
+            doc.addTag("Association");
+            doc.addTag("Divertissement");
+            doc.insert(statement);
+
+            doc = new Document("Demande facile", "2022-06-10", "C:/Users/ArtEfrei/Subvention2.pdf");
+            doc.setCategory("report");
+            doc.setTopic("Subvention ArtEfrei 2022");
+            doc.addTag("Association");
+            doc.insert(statement);
+
+            doc = new Document("Reglements EFREI", "2021-09-01", "C:/Users/EFREI/Regles.pdf");
+            doc.setCategory("policy");
+            doc.setTopic("Regles EFREI 2021");
+            doc.addTag("Etude");
+            doc.addTag("Regle");
+            doc.insert(statement);
+
+            ResultSet resultSet = statement.executeQuery("select count(*) as NbTopicTimes, Topic from Document \n" +
+                    "join Topic using(TopicID)\n" +
+                    "group by Topic\n" +
+                    "order by NbTopicTimes desc\n" +
+                    "limit 1;");
+            resultSet.next();
+            System.out.println("Topic = " + resultSet.getString(2) + ", NbTopicTimes = " + resultSet.getInt(1));
+
 
             con.close();
         } catch (Exception e) {

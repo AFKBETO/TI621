@@ -22,6 +22,13 @@ public class Document {
         tags = new TreeSet<>();
     }
 
+    public Document(String documentName, String storageAddress) {
+        this.documentID = ++COMPTEUR;
+        this.documentName = documentName;
+        this.storageAddress = storageAddress;
+        tags = new TreeSet<>();
+    }
+
     public int getDocumentID() {
         return documentID;
     }
