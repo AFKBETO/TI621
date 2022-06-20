@@ -1,6 +1,9 @@
 package TP4;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.TreeSet;
 import java.util.Set;
 
@@ -85,19 +88,26 @@ public class Document {
         return new TreeSet<String>(tags);
     }
 
-    public void sync(Statement statement) throws SQLException {
-        int catKey = Category.getKey(statement, category);
-        int topicKey = Topic.getKey(statement, topic);
+    public void sync(Connection con) throws SQLException {
+        Statement stm = con.createStatement();
+        int catKey = Category.getKey(con, category);
+        int topicKey = Topic.getKey(con, topic);
         Set<String> tagList = new TreeSet<>();
 
-        statement.execute("INSERT INTO Document(DocumentId,Documentname,"+ ((documentDate != null) ? "DocumentDate," : "") +
-                "StorageAddress,CategoryId,TopicId) VALUES ('" + documentID + "','" + documentName +
-                ((documentDate != null) ? ("','" + documentDate) : "") +"','" + storageAddress + "'," + catKey +
-                "," + topicKey + ") ON DUPLICATE KEY UPDATE " + "Documentname = '" + documentName +
-                ((documentDate != null) ? "',DocumentDate = '" + documentDate : "") +
-                "',StorageAddress = '" + storageAddress + "',CategoryId = " + catKey + ",TopicId = " + topicKey + ";");
+        stm.execute(
+                "INSERT INTO Document(DocumentId,Documentname,"+ ((documentDate != null) ? "DocumentDate," : " ") +
+                "StorageAddress,CategoryId,TopicId)" +
+                        "VALUES ('" + documentID + "','" + documentName +
+                        ((documentDate != null) ? ("','" + documentDate) : "") +
+                        "','" + storageAddress + "'," + catKey + "," + topicKey +
+                ") ON DUPLICATE KEY UPDATE " +
+                        "Documentname = '" + documentName +
+                        ((documentDate != null) ? ("',DocumentDate = '" + documentDate) : "") +
+                        "',StorageAddress = '" + storageAddress +
+                        "',CategoryId = " + catKey +
+                        ",TopicId = " + topicKey + ";");
 
-        ResultSet rS = statement.executeQuery("SELECT Tag FROM Possede JOIN Tag USING (TagId) WHERE DocumentId = " + documentID + ";");
+        ResultSet rS = stm.executeQuery("SELECT Tag FROM Possede JOIN Tag USING (TagId) WHERE DocumentId = " + documentID + ";");
         StringBuilder sqlQuery = new StringBuilder();
         while (rS.next()) {
             String tagDB = rS.getString("Tag");
@@ -111,15 +121,15 @@ public class Document {
             sqlQuery.insert(0, "DELETE FROM Possede WHERE DocumentID = " + documentID + " AND TagID IN (" +
                     "SELECT TagId FROM Tag WHERE Tag IN ('");
             sqlQuery.append("'));");
-            statement.execute(sqlQuery.toString());
+            stm.execute(sqlQuery.toString());
         }
         sqlQuery = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
         for (String tag: tags) {
-            int tagKey = Tag.getKey(statement, tag);
+            int tagKey = Tag.getKey(con, tag);
             sqlQuery.append("(" + documentID + "," + tagKey + "),");
         }
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
         sqlQuery.append(";");
-        statement.execute(sqlQuery.toString());
+        stm.execute(sqlQuery.toString());
     }
 }
