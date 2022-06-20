@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.TreeSet;
 import java.util.Set;
 
@@ -11,24 +13,30 @@ public class Document {
     private final int documentID;
     private String documentName;
     private String documentDate = null;
-    private String storageAddress;
+    private String storageAddress = null;
     private String category;
     private String topic;
     private final Set<String> tags;
     private static int COMPTEUR = 0;
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    public Document(String documentName, String documentDate, String storageAddress) {
+    public Document(String documentName, String documentDate, String storageAddress) throws ParseException {
         this.documentID = ++COMPTEUR;
         this.documentName = documentName;
+        format.parse(documentDate);
         this.documentDate = documentDate;
         this.storageAddress = storageAddress;
         tags = new TreeSet<>();
     }
 
-    public Document(String documentName, String storageAddress) {
+    public Document(String documentName) {
         this.documentID = ++COMPTEUR;
         this.documentName = documentName;
-        this.storageAddress = storageAddress;
+        tags = new TreeSet<>();
+    }
+
+    private Document(final int documentID){
+        this.documentID = documentID;
         tags = new TreeSet<>();
     }
 
@@ -48,7 +56,8 @@ public class Document {
         return documentDate;
     }
 
-    public void setDocumentDate(String documentDate) {
+    public void setDocumentDate(String documentDate) throws ParseException {
+        format.parse(documentDate);
         this.documentDate = documentDate;
     }
 
@@ -80,8 +89,8 @@ public class Document {
         tags.add(tag);
     }
 
-    public void deleteTag(String tag) {
-        tags.remove(tag);
+    public boolean deleteTag(String tag) {
+        return tags.remove(tag);
     }
 
     public Set<String> getTags() {
@@ -116,20 +125,57 @@ public class Document {
             }
             tagList.add(tagDB);
         }
-        if (sqlQuery.length() > 0) {
+        if (!sqlQuery.isEmpty()) {
             sqlQuery.delete(sqlQuery.length() - 4, sqlQuery.length());
             sqlQuery.insert(0, "DELETE FROM Possede WHERE DocumentID = " + documentID + " AND TagID IN (" +
                     "SELECT TagId FROM Tag WHERE Tag IN ('");
             sqlQuery.append("'));");
             stm.execute(sqlQuery.toString());
         }
-        sqlQuery = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
-        for (String tag: tags) {
-            int tagKey = Tag.getKey(con, tag);
-            sqlQuery.append("(" + documentID + "," + tagKey + "),");
+        if(tags.size() > 0) {
+            sqlQuery = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
+            for (String tag: tags) {
+                int tagKey = Tag.getKey(con, tag);
+                sqlQuery.append("(" + documentID + "," + tagKey + "),");
+            }
+            sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+            sqlQuery.append(";");
+            stm.execute(sqlQuery.toString());
         }
-        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
-        sqlQuery.append(";");
-        stm.execute(sqlQuery.toString());
+    }
+
+    public static Document fetchDocument(final Connection con, final int docId) throws SQLException, ParseException {
+        Statement stm = con.createStatement();
+        ResultSet rS = stm.executeQuery("SELECT DocumentName, DocumentDate, StorageAddress, Name as Category, Topic " +
+                "FROM Document join Category using(categoryId) join Topic using(TopicId) " +
+                "WHERE documentId=" + docId + ";");
+        if (rS.next()) {
+            Document result = new Document(docId);
+            result.setDocumentName(rS.getString("DocumentName"));
+            if (rS.getString("DocumentDate") != null) result.setDocumentDate(rS.getString("DocumentDate"));
+            if (rS.getString("StorageAddress") != null) result.setStorageAddress(rS.getString("StorageAddress"));
+            result.setCategory(rS.getString("Category"));
+            result.setTopic(rS.getString("Topic"));
+
+            rS = stm.executeQuery("SELECT Tag FROM Possede join Tag using(tagId) WHERE DocumentId=" + docId + ";");
+            while (rS.next()) {
+                result.addTag(rS.getString(1));
+            }
+            return result;
+        } else {
+            throw new SQLException("Aucun résultat trouvé");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "documentName='" + documentName + '\'' +
+                ", documentDate='" + documentDate + '\'' +
+                ", storageAddress='" + storageAddress + '\'' +
+                ", category='" + category + '\'' +
+                ", topic='" + topic + '\'' +
+                ", tags=" + tags +
+                '}';
     }
 }

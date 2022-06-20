@@ -16,10 +16,9 @@ public class SQLInitialiser {
             File file = new File("src/TP4/initialiser.sql");
             Scanner sc = new Scanner(file);
             sc.useDelimiter(";|--|$");
-            List<String> queries = new ArrayList<>();
-            String query;
+
             while (sc.hasNext()) {
-                query = sc.next().trim() + ";";
+                String query = sc.next().trim() + ";";
                 if (query.startsWith("# ") || query.length() == 1) {
                     continue;
                 }
