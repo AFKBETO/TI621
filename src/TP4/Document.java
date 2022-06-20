@@ -20,7 +20,7 @@ public class Document {
     private static int COMPTEUR = 0;
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    public Document(String documentName, String documentDate, String storageAddress) throws ParseException {
+    public Document(final String documentName, final String documentDate, final String storageAddress) throws ParseException {
         this.documentID = ++COMPTEUR;
         this.documentName = documentName;
         format.parse(documentDate);
@@ -29,7 +29,7 @@ public class Document {
         tags = new TreeSet<>();
     }
 
-    public Document(String documentName) {
+    public Document(final String documentName) {
         this.documentID = ++COMPTEUR;
         this.documentName = documentName;
         tags = new TreeSet<>();
@@ -48,7 +48,7 @@ public class Document {
         return documentName;
     }
 
-    public void setDocumentName(String documentName) {
+    public void setDocumentName(final String documentName) {
         this.documentName = documentName;
     }
 
@@ -56,7 +56,7 @@ public class Document {
         return documentDate;
     }
 
-    public void setDocumentDate(String documentDate) throws ParseException {
+    public void setDocumentDate(final String documentDate) throws ParseException {
         format.parse(documentDate);
         this.documentDate = documentDate;
     }
@@ -65,7 +65,7 @@ public class Document {
         return storageAddress;
     }
 
-    public void setStorageAddress(String storageAddress) {
+    public void setStorageAddress(final String storageAddress) {
         this.storageAddress = storageAddress;
     }
 
@@ -73,7 +73,7 @@ public class Document {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(final String category) {
         this.category = category;
     }
 
@@ -81,15 +81,15 @@ public class Document {
         return topic;
     }
 
-    public void setTopic(String topic) {
+    public void setTopic(final String topic) {
         this.topic = topic;
     }
 
-    public void addTag(String tag) {
+    public void addTag(final String tag) {
         tags.add(tag);
     }
 
-    public boolean deleteTag(String tag) {
+    public boolean deleteTag(final String tag) {
         return tags.remove(tag);
     }
 
@@ -97,7 +97,7 @@ public class Document {
         return new TreeSet<String>(tags);
     }
 
-    public void sync(Connection con) throws SQLException {
+    public void sync(final Connection con) throws SQLException {
         Statement stm = con.createStatement();
         int catKey = Category.getKey(con, category);
         int topicKey = Topic.getKey(con, topic);
