@@ -21,18 +21,22 @@ public class Document {
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
-     * Create a Document instance with the document name, document date and storage address
+     * Create a Document instance with the document name, document date, storage address, category and topic
      * @param documentName Name of the document
      * @param documentDate Date of the document
      * @param storageAddress Storage address of the document
+     * @param category Category of the document
+     * @param topic Topic of the document
      * @throws ParseException If the date format is not yyyy-MM-dd
      */
-    public Document(final String documentName, final String documentDate, final String storageAddress) throws ParseException {
+    public Document(final String documentName, final String documentDate, final String storageAddress, final String category, final String topic) throws ParseException {
         this.documentID = ++compteur;
         this.documentName = documentName;
         FORMAT.parse(documentDate);
         this.documentDate = documentDate;
         this.storageAddress = storageAddress;
+        this.category = category;
+        this.topic = topic;
         tags = new TreeSet<>();
     }
 

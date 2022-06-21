@@ -20,40 +20,30 @@ public class Main {
             DatabaseController.initialize(con);
 
             // add documents (Exo A)
-            Document doc = new Document("Demande difficile", "2022-06-17", "C:/Users/ArtEfrei/Subvention.pdf");
-            doc.setCategory("report");
-            doc.setTopic("Subvention ArtEfrei 2022");
+            Document doc = new Document("Demande difficile", "2022-06-17", "C:/Users/ArtEfrei/Subvention.pdf", "report", "Subvention ArtEfrei 2022");
             doc.addTag("Association");
             doc.sync(con);
             DatabaseController.printDocument(con, doc.getDocumentID());
 
-            doc = new Document("Le reve artistique", "2022-06-28", "C:/Users/ArtEfrei/Plaquette.pdf");
-            doc.setCategory("report");
-            doc.setTopic("Plaquette Partenariat ArtEfrei");
+            doc = new Document("Le reve artistique", "2022-06-28", "C:/Users/ArtEfrei/Plaquette.pdf", "report", "Plaquette Partenariat ArtEfrei");
             doc.addTag("Association");
             doc.addTag("Etude");
             doc.addTag("Divertissement");
             doc.sync(con);
             DatabaseController.printDocument(con, doc.getDocumentID());
 
-            doc = new Document("De beaux pulls", "2022-08-12", "C:/Users/ArtEfrei/Pulls.pdf");
-            doc.setCategory("order");
-            doc.setTopic("Dossier Sweat ArtEfrei");
+            doc = new Document("De beaux pulls", "2022-08-12", "C:/Users/ArtEfrei/Pulls.pdf", "order","Dossier Sweat ArtEfrei");
             doc.addTag("Association");
             doc.addTag("Divertissement");
             doc.sync(con);
             DatabaseController.printDocument(con, doc.getDocumentID());
 
-            doc = new Document("Changement de tableau", "2022-08-22", "C:/Users/ArtEfrei/SubChange.pdf");
-            doc.setCategory("receipt");
-            doc.setTopic("Subvention ArtEfrei 2022");
+            doc = new Document("Changement de tableau", "2022-08-22", "C:/Users/ArtEfrei/SubChange.pdf", "receipt", "Subvention ArtEfrei 2022");
             doc.addTag("Association");
             doc.sync(con);
             DatabaseController.printDocument(con, doc.getDocumentID());
 
-            doc = new Document("Reglements EFREI", "2021-09-01", "C:/Users/EFREI/Regles.pdf");
-            doc.setCategory("policy");
-            doc.setTopic("Regles EFREI 2021");
+            doc = new Document("Reglements EFREI", "2021-09-01", "C:/Users/EFREI/Regles.pdf", "policy", "Regles EFREI 2021");
             doc.addTag("Etude");
             doc.addTag("Regle");
             doc.sync(con);
