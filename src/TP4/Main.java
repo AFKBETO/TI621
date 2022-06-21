@@ -19,8 +19,7 @@ public class Main {
             System.out.println("Base de donnees connectee !");
             DatabaseController.initialize(con);
 
-            // add documents
-            System.out.println("\nExo A : ");
+            // add documents (Exo A)
             Document doc = new Document("Demande difficile", "2022-06-17", "C:/Users/ArtEfrei/Subvention.pdf");
             doc.setCategory("report");
             doc.setTopic("Subvention ArtEfrei 2022");
@@ -76,7 +75,7 @@ public class Main {
                 switch(commande) {
                     case ("q"):
                         break;
-                    case ("1"):
+                    case ("1"): // Exo B.i
                         System.out.println("Lister les documents par :\n" +
                                 "1. Categorie\n" +
                                 "2. Sujet\n" +
@@ -113,14 +112,14 @@ public class Main {
                             System.out.println("Aucun resultat trouve");
                         }
                         break;
-                    case ("2"):
+                    case ("2"): // Exo B.ii
                         rS = statement.executeQuery("select count(*) as NbTopicTimes, Topic from Document " +
                                 "join Topic using(TopicID) group by Topic order by NbTopicTimes desc limit 1;");
                         rS.next();
                         System.out.printf("%-30s %-10s\n", "Topic", "NbTopicTimes");
                         System.out.printf("%-30s %-10s\n", rS.getString("Topic"), rS.getInt("NbTopicTimes"));
                         break;
-                    case ("3"):
+                    case ("3"): // Exo B.iii
                         rS = statement.executeQuery("select Tag, count(Tag) as NbOccurrenceTag from Possede\n" +
                                 "join Tag using(TagID) group by Tag order by NbOccurrenceTag;");
                         System.out.printf("%-30s %-10s\n", "Tag", "NbOccurrenceTag");
@@ -128,7 +127,7 @@ public class Main {
                             System.out.printf("%-30s %-10s\n", rS.getString("Tag"), rS.getInt("NbOccurrenceTag"));
                         }
                         break;
-                    case ("4"):
+                    case ("4"): // Exo C.i
                         System.out.println("Saisissez le nom du document :");
                         doc = new Document(sc.nextLine());
                         System.out.println("Saisissez la date du document :");
@@ -162,7 +161,7 @@ public class Main {
                         doc.sync(con);
                         DatabaseController.printDocument(con, doc.getDocumentID());
                         break;
-                    case ("5"):
+                    case ("5"): // Exo C.ii & iii
                         System.out.println("Veuillez indiquer l'ID de document a modifier :");
                         try {
                             doc = Document.fetchDocument(con, sc.nextInt());
@@ -187,7 +186,7 @@ public class Main {
                                 System.out.println("Choisissez un nouveau nom :");
                                 doc.setDocumentName(sc.nextLine());
                                 break;
-                            case ("2"):
+                            case ("2"): // Exo C.ii
                                 System.out.println("Choisissez une nouvelle date :");
                                 try {
                                     doc.setDocumentDate(sc.nextLine());
@@ -216,7 +215,7 @@ public class Main {
                                 }
                                 doc.setTopic(string);
                                 break;
-                            case ("6"):
+                            case ("6"): // Exo C.iii
                                 System.out.println("Choisissez les nouveaux tags (Laissez la ligne vide pour terminer) :");
                                 string = sc.nextLine();
                                 while (!string.isEmpty()) {

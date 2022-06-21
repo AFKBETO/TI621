@@ -42,3 +42,9 @@ CREATE TABLE Possede(
     FOREIGN KEY(DocumentID) REFERENCES Document(DocumentID),
     FOREIGN KEY(TagID) REFERENCES Tag(TagID)
 );
+
+# Insertion dans les tables --
+
+INSERT INTO Category(Name) VALUES ("policy"), ("report"), ("receipt"), ("order");
+
+INSERT INTO Topic(Topic) VALUES ("Subvention ArtEfrei 2022 - 2023"), ("Statut ArtEfrei 2022"), ("Plaquette Partenariat ArtEfrei"), ("Dossier Sweat Art'Efrei");
