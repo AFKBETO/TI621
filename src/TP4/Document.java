@@ -123,6 +123,12 @@ public class Document {
      * @throws SQLException
      */
     public void sync(final Connection con) throws SQLException {
+        if (category == null || topic == null) {
+            StringBuilder errorMessage = new StringBuilder("Certains attributs sont nuls : ");
+            if (category == null) errorMessage.append("category ");
+            if (topic == null) errorMessage.append("topic");
+            throw new SQLException(errorMessage.toString());
+        }
         Statement stm = con.createStatement();
         int catKey = DatabaseController.getCategoryKey(con, category);
         int topicKey = DatabaseController.getTopicId(con, topic);

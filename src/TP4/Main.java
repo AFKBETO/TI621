@@ -13,12 +13,13 @@ public class Main {
         String password = sc.nextLine();
 
         try {
+            //connect to database
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", user, password);
             System.out.println("Base de donnees connectee !");
             DatabaseController.initialize(con);
 
-            Statement statement = con.createStatement();
+            // add documents
             System.out.println("\nExo A : ");
             Document doc = new Document("Demande difficile", "2022-06-17", "C:/Users/ArtEfrei/Subvention.pdf");
             doc.setCategory("report");
@@ -59,11 +60,12 @@ public class Main {
             doc.sync(con);
             printDocument(con, doc.getDocumentID());
 
-            String commande = ".";
+            String commande = "";
+            Statement statement = con.createStatement();
             ResultSet rS;
 
             while (!commande.equals("q")) {
-                System.out.println("Que voulez-vous?\n" +
+                System.out.println("\nQue voulez-vous?\n" +
                         "1. Lister les documents par categorie, par sujet ou par tag.\n" +
                         "2. Chercher le sujet le plus frequent.\n" +
                         "3. Recuperer et afficher le nombre d'occurrences de chaque tag.\n" +
@@ -83,7 +85,7 @@ public class Main {
                         String sql = "select DocumentName,";
                         switch (commande) {
                             case ("1"):
-                                System.out.println("Choisissez votre catégorie :");
+                                System.out.println("Choisissez votre categorie :");
                                 sql += "Name as Category from Document join Category using(CategoryID) where Name='";
                                 break;
                             case ("2"):
@@ -108,7 +110,7 @@ public class Main {
                                 System.out.println(rS.getString(1));
                             }
                         } else {
-                            System.out.println("Aucun resultat trouvé");
+                            System.out.println("Aucun resultat trouve");
                         }
                         break;
                     case ("2"):
