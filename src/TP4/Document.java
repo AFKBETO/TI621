@@ -17,18 +17,18 @@ public class Document {
     private String category;
     private String topic;
     private final Set<String> tags;
-    private static int COMPTEUR = 0;
-    private static SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static int compteur = 0;
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
-     * Public Constructor, creating a Document instance with the document name, document date and storage address
-     * @param documentName name of the document
-     * @param documentDate date of the document
-     * @param storageAddress storage address
-     * @throws ParseException
+     * Create a Document instance with the document name, document date and storage address
+     * @param documentName Name of the document
+     * @param documentDate Date of the document
+     * @param storageAddress Storage address of the document
+     * @throws ParseException If the date format is not yyyy-MM-dd
      */
     public Document(final String documentName, final String documentDate, final String storageAddress) throws ParseException {
-        this.documentID = ++COMPTEUR;
+        this.documentID = ++compteur;
         this.documentName = documentName;
         FORMAT.parse(documentDate);
         this.documentDate = documentDate;
@@ -37,90 +37,147 @@ public class Document {
     }
 
     /**
-     * Public Constructor, creating a blank Document instance with only the document name
-     * @param documentName name of the document
+     * Create a blank Document instance with only the document name
+     * @param documentName Name of the document
      */
     public Document(final String documentName) {
-        this.documentID = ++COMPTEUR;
+        this.documentID = ++compteur;
         this.documentName = documentName;
         tags = new TreeSet<>();
     }
 
     /**
-     * Private Constructor to create a document with a given ID
-     * @param documentID id of the document
+     * Create a document with a given ID. Use only for internal methods that requires creation of Document with specific ID.
+     * @param documentID Id of the document
+     * @throws Exception
      */
-    private Document(final int documentID){
+    protected Document(final int documentID) throws Exception {
+        if (documentID >= compteur) {
+            throw new Exception("Document ID invalide");
+        }
         this.documentID = documentID;
         tags = new TreeSet<>();
     }
 
+    /**
+     * Get the current document's ID.
+     * @return This document's ID
+     */
     public int getDocumentID() {
         return documentID;
     }
 
+    /**
+     * Get the document's name
+     * @return This document's name
+     */
     public String getDocumentName() {
         return documentName;
     }
 
+    /**
+     * Set the document's name
+     * @param documentName The name to be set for this document
+     */
     public void setDocumentName(final String documentName) {
         this.documentName = documentName;
     }
 
+    /**
+     * Get the document's date
+     * @return This document's date
+     */
     public String getDocumentDate() {
         return documentDate;
     }
 
     /**
-     * setDocumentDate: set a string with format yyyy-MM-dd as document date
-     * @param documentDate date of the document
-     * @throws ParseException
+     * Set a string with format yyyy-MM-dd as document date
+     * @param documentDate The date to be set for this document
+     * @throws ParseException If the format is not yyyy-MM-dd
      */
     public void setDocumentDate(final String documentDate) throws ParseException {
         FORMAT.parse(documentDate);
         this.documentDate = documentDate;
     }
 
+    /**
+     * Get the storage address of this document
+     * @return This document's storage address
+     */
     public String getStorageAddress() {
         return storageAddress;
     }
 
+    /**
+     * Set the storage address of this document
+     * @param storageAddress The storage address to be set for this document
+     */
     public void setStorageAddress(final String storageAddress) {
         this.storageAddress = storageAddress;
     }
 
+    /**
+     * Get this document's category
+     * @return This document's category
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Set this document's category
+     * @param category The category to be set for this document
+     */
     public void setCategory(final String category) {
         this.category = category;
     }
 
+    /**
+     * Get this document's topic
+     * @return This document's topic
+     */
     public String getTopic() {
         return topic;
     }
 
+    /**
+     * Set this document's topic
+     * @param topic The topic to be set for this document
+     */
     public void setTopic(final String topic) {
         this.topic = topic;
     }
 
+    /**
+     * Add a tag to this document
+     * @param tag The tag to be added for this document
+     */
     public void addTag(final String tag) {
         tags.add(tag);
     }
 
-    public boolean deleteTag(final String tag) {
+    /**
+     * Remove a tag from this document
+     * @param tag The tag to be removed from this document
+     * @return Returns true if the tag exists in the list
+     */
+    public boolean removeTag(final String tag) {
         return tags.remove(tag);
     }
 
+    /**
+     * Get this document's list of tags
+     * @return This document's list of tags
+     */
     public Set<String> getTags() {
         return new TreeSet<String>(tags);
     }
 
     /**
-     * sync: synchronize data of the current Document instance into the database
+     * Synchronize data of the current Document instance into the database
      * @param con Connection to the database
-     * @throws SQLException
+     * @throws SQLException If any SQL error occurs during the synchronization
      */
     public void sync(final Connection con) throws SQLException {
         if (category == null || topic == null) {
@@ -180,14 +237,15 @@ public class Document {
     }
 
     /**
-     * fetchDocument: search for a document with a given ID, which then generate an instance of Document with its data
+     * Search in the database for a document with a given ID, which then generate an instance of Document with its data
      * @param con Connection to the database
-     * @param docId id of the document
-     * @return document instance
-     * @throws SQLException
-     * @throws ParseException
+     * @param docId Id of the document
+     * @return An instance of Document corresponding to the Id
+     * @throws ParseException If the document date is not yyyy-MM-dd
+     * @throws SQLException If there is any SQL error happening
+     * @throws Exception If the document ID is greater than the internal counter
      */
-    public static Document fetchDocument(final Connection con, final int docId) throws SQLException, ParseException {
+    public static Document fetchDocument(final Connection con, final int docId) throws Exception {
         Statement stm = con.createStatement();
         ResultSet rS = stm.executeQuery("SELECT DocumentName, DocumentDate, StorageAddress, Name as Category, Topic " +
                 "FROM Document join Category using(categoryId) join Topic using(TopicId) " +

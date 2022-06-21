@@ -228,7 +228,7 @@ public class Main {
                                 System.out.println("Choisissez les tags a supprimer (Laissez la ligne vide pour terminer) :");
                                 string = sc.nextLine();
                                 while (!string.isEmpty()) {
-                                    if(doc.deleteTag(string)){
+                                    if(doc.removeTag(string)){
                                         System.out.println("Tag " + string + " supprime.");
                                     } else {
                                         System.out.println("Tag " + string + " n'existe pas.");

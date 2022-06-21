@@ -10,11 +10,11 @@ import java.util.Scanner;
 
 public class DatabaseController {
     /**
-     * initialize: initialise the database with the SQL scripts in initialiser.sql
+     * Initialize the database with the SQL scripts in initialiser.sql
      * @param con Connection to the database
-     * @return true if connection is open, else false
-     * @throws SQLException
-     * @throws FileNotFoundException
+     * @return Returns true if connection is open and the SQL is proceeded successfully
+     * @throws SQLException If there is any SQL error happening
+     * @throws FileNotFoundException If the file is missing
      */
     public static boolean initialize(Connection con) throws SQLException, FileNotFoundException {
         if (!con.isClosed()) {
@@ -37,15 +37,15 @@ public class DatabaseController {
     }
 
     /**
-     * getTopic: search for topic with a given id in the database
+     * Search for topic with a given id in the database
      * @param con Connection to the database
-     * @param key id of the topic
-     * @return topic String
-     * @throws SQLException
+     * @param topicId Id of the topic
+     * @return The topic's name
+     * @throws SQLException If there is any SQL errors happening
      */
-    public static String getTopic(final Connection con, final int key) throws SQLException {
+    public static String getTopic(final Connection con, final int topicId) throws SQLException {
         Statement stm = con.createStatement();
-        ResultSet resultSet = stm.executeQuery("SELECT topic FROM topic WHERE topicId = '" + key + "' LIMIT 1");
+        ResultSet resultSet = stm.executeQuery("SELECT topic FROM topic WHERE topicId = '" + topicId + "' LIMIT 1");
         if (!resultSet.next()) {
             throw new SQLException("topicId introuvable");
         }
@@ -53,11 +53,11 @@ public class DatabaseController {
     }
 
     /**
-     * getTopicId: search for id of a given topic in the database
+     * Search for id of a given topic in the database
      * @param con Connection to the database
-     * @param topic topic name
-     * @return key int
-     * @throws SQLException
+     * @param topic Topic name
+     * @return The topic's Id
+     * @throws SQLException If there is any SQL errors happening
      */
     public static int getTopicId(final Connection con, final String topic) throws SQLException {
         Statement stm = con.createStatement();
@@ -71,15 +71,15 @@ public class DatabaseController {
     }
 
     /**
-     * getTag: search for tag with a given id in the database
+     * Search for tag with a given id in the database
      * @param con Connection to the database
-     * @param key id of the tag
-     * @return tag String
-     * @throws SQLException
+     * @param tagId Id of the tag
+     * @return The tag's name
+     * @throws SQLException If there is any SQL errors happening
      */
-    public static String getTag(final Connection con, final int key) throws SQLException {
+    public static String getTag(final Connection con, final int tagId) throws SQLException {
         Statement stm = con.createStatement();
-        ResultSet resultSet = stm.executeQuery("SELECT tag FROM tag WHERE tagID = '" + key + "' LIMIT 1");
+        ResultSet resultSet = stm.executeQuery("SELECT tag FROM tag WHERE tagID = '" + tagId + "' LIMIT 1");
         if (!resultSet.next()) {
             throw new SQLException("tagId introuvable");
         }
@@ -87,11 +87,11 @@ public class DatabaseController {
     }
 
     /**
-     * getTagId: search for id of a given tag in the database
+     * Search for id of a given tag in the database
      * @param con Connection to the database
-     * @param tag tag name
-     * @return id int
-     * @throws SQLException
+     * @param tag Tag name
+     * @return The tag's Id
+     * @throws SQLException If there is any SQL errors happening
      */
     public static int getTagId(final Connection con, final String tag) throws SQLException {
         Statement stm = con.createStatement();
@@ -105,15 +105,15 @@ public class DatabaseController {
     }
 
     /**
-     * getCategory: search for category with a given id in the database
+     * Search for category with a given id in the database
      * @param con Connection to the database
-     * @param key id of the category
-     * @return category String
-     * @throws SQLException
+     * @param categoryId Id of the category
+     * @return The category's name
+     * @throws SQLException If there is any SQL errors happening
      */
-    public static String getName(final Connection con, final int key) throws SQLException {
+    public static String getName(final Connection con, final int categoryId) throws SQLException {
         Statement stm = con.createStatement();
-        ResultSet resultSet = stm.executeQuery("SELECT name FROM category WHERE categoryID = '" + key + "' LIMIT 1");
+        ResultSet resultSet = stm.executeQuery("SELECT name FROM category WHERE categoryID = '" + categoryId + "' LIMIT 1");
         if (!resultSet.next()) {
             throw new SQLException("categoryId introuvable");
         }
@@ -121,11 +121,11 @@ public class DatabaseController {
     }
 
     /**
-     * getCategoryKey: search for id of a given category in the database
+     * Search for id of a given category in the database
      * @param con Connection to the database
-     * @param name category name
-     * @return key int
-     * @throws SQLException
+     * @param name Category name
+     * @return The category's Id
+     * @throws SQLException If there is any SQL errors happening
      */
     public static int getCategoryKey(final Connection con, final String name) throws SQLException {
         Statement stm = con.createStatement();
@@ -139,10 +139,10 @@ public class DatabaseController {
     }
 
     /**
-     * printDocument: print the document with the given docId. This is different from printing a Document instance
+     * Print the document with the given docId. This is different from printing a Document instance
      * @param con Connection to the database
-     * @param docId id of the document
-     * @throws SQLException
+     * @param docId Id of the document
+     * @throws SQLException If there is any SQL errors happening
      */
     public static void printDocument(final Connection con, final int docId) throws SQLException {
         Statement stm = con.createStatement();
