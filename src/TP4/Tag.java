@@ -6,6 +6,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Tag {
+    /**
+     * getTag: search for tag with a given id in the database
+     * @param con Connection to the database
+     * @param key id of the tag
+     * @return tag String
+     * @throws SQLException
+     */
     public static String getTag(final Connection con, final int key) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet resultSet = stm.executeQuery("SELECT tag FROM tag WHERE tagID = '" + key + "' LIMIT 1");
@@ -15,6 +22,13 @@ public class Tag {
         return resultSet.getString(1);
     }
 
+    /**
+     * getKey: search for id of a given tag in the database
+     * @param con Connection to the database
+     * @param tag tag name
+     * @return key int
+     * @throws SQLException
+     */
     public static int getKey(final Connection con, final String tag) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet resultSet = stm.executeQuery("SELECT tagID FROM tag WHERE tag = '" + tag + "' LIMIT 1");

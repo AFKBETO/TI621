@@ -20,6 +20,13 @@ public class Document {
     private static int COMPTEUR = 0;
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
+    /**
+     * Public Constructor, creating a Document instance with the document name, document date and storage address
+     * @param documentName name of the document
+     * @param documentDate date of the document
+     * @param storageAddress storage address
+     * @throws ParseException
+     */
     public Document(final String documentName, final String documentDate, final String storageAddress) throws ParseException {
         this.documentID = ++COMPTEUR;
         this.documentName = documentName;
@@ -29,12 +36,20 @@ public class Document {
         tags = new TreeSet<>();
     }
 
+    /**
+     * Public Constructor, creating a blank Document instance with only the document name
+     * @param documentName name of the document
+     */
     public Document(final String documentName) {
         this.documentID = ++COMPTEUR;
         this.documentName = documentName;
         tags = new TreeSet<>();
     }
 
+    /**
+     * Private Constructor to create a document with a given ID
+     * @param documentID id of the document
+     */
     private Document(final int documentID){
         this.documentID = documentID;
         tags = new TreeSet<>();
@@ -56,6 +71,11 @@ public class Document {
         return documentDate;
     }
 
+    /**
+     * setDocumentDate: set a string with format yyyy-MM-dd as document date
+     * @param documentDate date of the document
+     * @throws ParseException
+     */
     public void setDocumentDate(final String documentDate) throws ParseException {
         format.parse(documentDate);
         this.documentDate = documentDate;
@@ -97,12 +117,18 @@ public class Document {
         return new TreeSet<String>(tags);
     }
 
+    /**
+     * sync: synchronize data of the current Document instance into the database
+     * @param con Connection to the database
+     * @throws SQLException
+     */
     public void sync(final Connection con) throws SQLException {
         Statement stm = con.createStatement();
         int catKey = Category.getKey(con, category);
         int topicKey = Topic.getKey(con, topic);
         Set<String> tagList = new TreeSet<>();
 
+        // create a document if not exist, else update data in case of key duplicate
         stm.execute(
                 "INSERT INTO Document(DocumentId,Documentname,"+ ((documentDate != null) ? "DocumentDate," : " ") +
                 "StorageAddress,CategoryId,TopicId)" +
@@ -116,6 +142,7 @@ public class Document {
                         "',CategoryId = " + catKey +
                         ",TopicId = " + topicKey + ";");
 
+        // search for tag list of the document, if exists
         ResultSet rS = stm.executeQuery("SELECT Tag FROM Possede JOIN Tag USING (TagId) WHERE DocumentId = " + documentID + ";");
         StringBuilder sqlQuery = new StringBuilder();
         while (rS.next()) {
@@ -125,6 +152,7 @@ public class Document {
             }
             tagList.add(tagDB);
         }
+        // delete tags that are not in document's tags
         if (!sqlQuery.isEmpty()) {
             sqlQuery.delete(sqlQuery.length() - 4, sqlQuery.length());
             sqlQuery.insert(0, "DELETE FROM Possede WHERE DocumentID = " + documentID + " AND TagID IN (" +
@@ -132,6 +160,7 @@ public class Document {
             sqlQuery.append("'));");
             stm.execute(sqlQuery.toString());
         }
+        // add tags
         if(tags.size() > 0) {
             sqlQuery = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
             for (String tag: tags) {
@@ -144,6 +173,14 @@ public class Document {
         }
     }
 
+    /**
+     * fetchDocument: search for a document with a given ID, which then generate an instance of Document with its data
+     * @param con Connection to the database
+     * @param docId id of the document
+     * @return document instance
+     * @throws SQLException
+     * @throws ParseException
+     */
     public static Document fetchDocument(final Connection con, final int docId) throws SQLException, ParseException {
         Statement stm = con.createStatement();
         ResultSet rS = stm.executeQuery("SELECT DocumentName, DocumentDate, StorageAddress, Name as Category, Topic " +

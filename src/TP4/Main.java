@@ -253,6 +253,12 @@ public class Main {
         }
     }
 
+    /**
+     * printDocument: print the document with the given docId. This is different from printing a Document instance
+     * @param con Connection to the database
+     * @param docId id of the document
+     * @throws SQLException
+     */
     public static void printDocument(final Connection con, final int docId) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet rS = stm.executeQuery("SELECT documentName, documentDate, storageAddress, Name AS Category, Topic FROM Document " +
