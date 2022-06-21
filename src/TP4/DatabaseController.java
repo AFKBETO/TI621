@@ -169,8 +169,8 @@ public class DatabaseController {
                 "JOIN Category USING(categoryId) JOIN Topic USING(topicId) " +
                 "WHERE DocumentId = " + docId + ";");
         if(rS.next()){
-            System.out.printf("%-25s %-12s %-35s %-10s %-30s %-10s\n", "DocumentName", "Date", "StorageAddress", "Category", "Topic", "Tags");
-            System.out.printf("%-25s %-12s %-35s %-10s %-30s", rS.getString("documentName"), rS.getString("documentDate"), rS.getString("storageAddress"), rS.getString("Category"), rS.getString("Topic"));
+            System.out.printf("%-5s %-25s %-12s %-35s %-10s %-30s %-10s\n", "ID", "DocumentName", "Date", "StorageAddress", "Category", "Topic", "Tags");
+            System.out.printf("%-5s %-25s %-12s %-35s %-10s %-30s", docId, rS.getString("documentName"), rS.getString("documentDate"), rS.getString("storageAddress"), rS.getString("Category"), rS.getString("Topic"));
             rS = stm.executeQuery("SELECT Tag FROM Possede JOIN Tag USING(TagId) WHERE DocumentId = " + docId + ";");
             while (rS.next()) {
                 System.out.print(rS.getString(1) + " ");

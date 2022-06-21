@@ -57,7 +57,7 @@ public class Document {
      * @throws Exception If the Id is greater or equal than the internal counter
      */
     protected Document(final int documentID) throws Exception {
-        if (documentID >= compteur) {
+        if (documentID > compteur) {
             throw new Exception("Document ID invalide");
         }
         this.documentID = documentID;
