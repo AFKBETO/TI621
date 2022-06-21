@@ -137,4 +137,26 @@ public class DatabaseController {
         }
         return resultSet.getInt(1);
     }
+
+    /**
+     * printDocument: print the document with the given docId. This is different from printing a Document instance
+     * @param con Connection to the database
+     * @param docId id of the document
+     * @throws SQLException
+     */
+    public static void printDocument(final Connection con, final int docId) throws SQLException {
+        Statement stm = con.createStatement();
+        ResultSet rS = stm.executeQuery("SELECT documentName, documentDate, storageAddress, Name AS Category, Topic FROM Document " +
+                "JOIN Category USING(categoryId) JOIN Topic USING(topicId) " +
+                "WHERE DocumentId = " + docId + ";");
+        if(rS.next()){
+            System.out.printf("%-25s %-12s %-35s %-10s %-30s %-10s\n", "DocumentName", "Date", "StorageAddress", "Category", "Topic", "Tags");
+            System.out.printf("%-25s %-12s %-35s %-10s %-30s", rS.getString("documentName"), rS.getString("documentDate"), rS.getString("storageAddress"), rS.getString("Category"), rS.getString("Topic"));
+            rS = stm.executeQuery("SELECT Tag FROM Possede JOIN Tag USING(TagId) WHERE DocumentId = " + docId + ";");
+            while (rS.next()) {
+                System.out.print(rS.getString(1) + " ");
+            }
+            System.out.println();
+        }
+    }
 }

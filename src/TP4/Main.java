@@ -26,7 +26,7 @@ public class Main {
             doc.setTopic("Subvention ArtEfrei 2022");
             doc.addTag("Association");
             doc.sync(con);
-            printDocument(con, doc.getDocumentID());
+            DatabaseController.printDocument(con, doc.getDocumentID());
 
             doc = new Document("Le reve artistique", "2022-06-28", "C:/Users/ArtEfrei/Plaquette.pdf");
             doc.setCategory("report");
@@ -35,7 +35,7 @@ public class Main {
             doc.addTag("Etude");
             doc.addTag("Divertissement");
             doc.sync(con);
-            printDocument(con, doc.getDocumentID());
+            DatabaseController.printDocument(con, doc.getDocumentID());
 
             doc = new Document("De beaux pulls", "2022-08-12", "C:/Users/ArtEfrei/Pulls.pdf");
             doc.setCategory("order");
@@ -43,14 +43,14 @@ public class Main {
             doc.addTag("Association");
             doc.addTag("Divertissement");
             doc.sync(con);
-            printDocument(con, doc.getDocumentID());
+            DatabaseController.printDocument(con, doc.getDocumentID());
 
             doc = new Document("Changement de tableau", "2022-08-22", "C:/Users/ArtEfrei/SubChange.pdf");
             doc.setCategory("receipt");
             doc.setTopic("Subvention ArtEfrei 2022");
             doc.addTag("Association");
             doc.sync(con);
-            printDocument(con, doc.getDocumentID());
+            DatabaseController.printDocument(con, doc.getDocumentID());
 
             doc = new Document("Reglements EFREI", "2021-09-01", "C:/Users/EFREI/Regles.pdf");
             doc.setCategory("policy");
@@ -58,7 +58,7 @@ public class Main {
             doc.addTag("Etude");
             doc.addTag("Regle");
             doc.sync(con);
-            printDocument(con, doc.getDocumentID());
+            DatabaseController.printDocument(con, doc.getDocumentID());
 
             String commande = "";
             Statement statement = con.createStatement();
@@ -160,7 +160,7 @@ public class Main {
                             string = sc.nextLine();
                         }
                         doc.sync(con);
-                        printDocument(con, doc.getDocumentID());
+                        DatabaseController.printDocument(con, doc.getDocumentID());
                         break;
                     case ("5"):
                         System.out.println("Veuillez indiquer l'ID de document a modifier :");
@@ -242,7 +242,7 @@ public class Main {
                         }
                         doc.sync(con);
                         System.out.println(doc);
-                        printDocument(con, doc.getDocumentID());
+                        DatabaseController.printDocument(con, doc.getDocumentID());
                         break;
                     default:
                         System.out.println("Commande invalide.");
@@ -255,25 +255,4 @@ public class Main {
         }
     }
 
-    /**
-     * printDocument: print the document with the given docId. This is different from printing a Document instance
-     * @param con Connection to the database
-     * @param docId id of the document
-     * @throws SQLException
-     */
-    public static void printDocument(final Connection con, final int docId) throws SQLException {
-        Statement stm = con.createStatement();
-        ResultSet rS = stm.executeQuery("SELECT documentName, documentDate, storageAddress, Name AS Category, Topic FROM Document " +
-                "JOIN Category USING(categoryId) JOIN Topic USING(topicId) " +
-                "WHERE DocumentId = " + docId + ";");
-        if(rS.next()){
-            System.out.printf("%-25s %-12s %-35s %-10s %-30s %-10s\n", "DocumentName", "Date", "StorageAddress", "Category", "Topic", "Tags");
-            System.out.printf("%-25s %-12s %-35s %-10s %-30s", rS.getString("documentName"), rS.getString("documentDate"), rS.getString("storageAddress"), rS.getString("Category"), rS.getString("Topic"));
-            rS = stm.executeQuery("SELECT Tag FROM Possede JOIN Tag USING(TagId) WHERE DocumentId = " + docId + ";");
-            while (rS.next()) {
-                System.out.print(rS.getString(1) + " ");
-            }
-            System.out.println();
-        }
-    }
 }
