@@ -181,7 +181,7 @@ public class Document {
     /**
      * Synchronize data of the current Document instance into the database
      * @param con Connection to the database
-     * @throws SQLException If any SQL error occurs during the synchronization
+     * @throws SQLException If category and topic are null, or there is any SQL error occurs during the synchronization
      */
     public void sync(final Connection con) throws SQLException {
         if (category == null || topic == null) {
