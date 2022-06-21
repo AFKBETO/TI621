@@ -124,8 +124,8 @@ public class Document {
      */
     public void sync(final Connection con) throws SQLException {
         Statement stm = con.createStatement();
-        int catKey = Category.getKey(con, category);
-        int topicKey = Topic.getKey(con, topic);
+        int catKey = DatabaseController.getCategoryKey(con, category);
+        int topicKey = DatabaseController.getTopicId(con, topic);
         Set<String> tagList = new TreeSet<>();
 
         // create a document if not exist, else update data in case of key duplicate
@@ -164,7 +164,7 @@ public class Document {
         if(tags.size() > 0) {
             sqlQuery = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
             for (String tag: tags) {
-                int tagKey = Tag.getKey(con, tag);
+                int tagKey = DatabaseController.getTagId(con, tag);
                 sqlQuery.append("(" + documentID + "," + tagKey + "),");
             }
             sqlQuery.deleteCharAt(sqlQuery.length() - 1);

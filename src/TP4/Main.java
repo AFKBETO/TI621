@@ -16,7 +16,7 @@ public class Main {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", user, password);
             System.out.println("Base de donnees connectee !");
-            SQLInitialiser.run(con);
+            DatabaseController.initialize(con);
 
             Statement statement = con.createStatement();
             System.out.println("\nExo A : ");
