@@ -18,7 +18,7 @@ public class Document {
     private String topic;
     private final Set<String> tags;
     private static int COMPTEUR = 0;
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Public Constructor, creating a Document instance with the document name, document date and storage address
@@ -30,7 +30,7 @@ public class Document {
     public Document(final String documentName, final String documentDate, final String storageAddress) throws ParseException {
         this.documentID = ++COMPTEUR;
         this.documentName = documentName;
-        format.parse(documentDate);
+        FORMAT.parse(documentDate);
         this.documentDate = documentDate;
         this.storageAddress = storageAddress;
         tags = new TreeSet<>();
@@ -77,7 +77,7 @@ public class Document {
      * @throws ParseException
      */
     public void setDocumentDate(final String documentDate) throws ParseException {
-        format.parse(documentDate);
+        FORMAT.parse(documentDate);
         this.documentDate = documentDate;
     }
 
