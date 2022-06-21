@@ -9,14 +9,40 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class DatabaseController {
+    private Connection con = null;
+    private static final DatabaseController instance = new DatabaseController();
+
+    private DatabaseController() {}
+
+    /**
+     * Get the controller instance using the Connection
+     * @param con Connection to the database
+     * @return Singleton instance of DatabaseController
+     */
+    public static DatabaseController getInstance(Connection con) {
+        instance.con = con;
+        return instance;
+    }
+
+    /**
+     * Get the controller instance, only usable if Connection has been specified
+     * @return Singleton instance of DatabaseController
+     * @throws Exception If getInstance(Connection con) has not been used before
+     */
+    public static DatabaseController getInstance() throws Exception {
+        if (instance.con == null) {
+            throw new Exception("Connection n'est pas specifiee");
+        }
+        return instance;
+    }
+
     /**
      * Initialize the database with the SQL scripts in initialiser.sql
-     * @param con Connection to the database
      * @return Returns true if connection is open and the SQL is proceeded successfully
      * @throws SQLException If there is any SQL error happening
      * @throws FileNotFoundException If the file is missing
      */
-    public static boolean initialize(Connection con) throws SQLException, FileNotFoundException {
+    public boolean initialize() throws SQLException, FileNotFoundException {
         if (!con.isClosed()) {
             Statement stm = con.createStatement();
             File file = new File("src/TP4/initialiser.sql");
@@ -38,12 +64,11 @@ public class DatabaseController {
 
     /**
      * Search for topic with a given id in the database
-     * @param con Connection to the database
      * @param topicId Id of the topic
      * @return The topic's name
      * @throws SQLException If there is any SQL errors happening
      */
-    public static String getTopic(final Connection con, final int topicId) throws SQLException {
+    public String getTopic(final int topicId) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet resultSet = stm.executeQuery("SELECT topic FROM topic WHERE topicId = '" + topicId + "' LIMIT 1");
         if (!resultSet.next()) {
@@ -54,12 +79,11 @@ public class DatabaseController {
 
     /**
      * Search for id of a given topic in the database
-     * @param con Connection to the database
      * @param topic Topic name
      * @return The topic's Id
      * @throws SQLException If there is any SQL errors happening
      */
-    public static int getTopicId(final Connection con, final String topic) throws SQLException {
+    public int getTopicId(final String topic) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet resultSet = stm.executeQuery("SELECT topicId FROM topic WHERE topic = '" + topic + "' LIMIT 1");
         if (!resultSet.next()) {
@@ -72,12 +96,11 @@ public class DatabaseController {
 
     /**
      * Search for tag with a given id in the database
-     * @param con Connection to the database
      * @param tagId Id of the tag
      * @return The tag's name
      * @throws SQLException If there is any SQL errors happening
      */
-    public static String getTag(final Connection con, final int tagId) throws SQLException {
+    public String getTag(final int tagId) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet resultSet = stm.executeQuery("SELECT tag FROM tag WHERE tagID = '" + tagId + "' LIMIT 1");
         if (!resultSet.next()) {
@@ -88,12 +111,11 @@ public class DatabaseController {
 
     /**
      * Search for id of a given tag in the database
-     * @param con Connection to the database
      * @param tag Tag name
      * @return The tag's Id
      * @throws SQLException If there is any SQL errors happening
      */
-    public static int getTagId(final Connection con, final String tag) throws SQLException {
+    public int getTagId(final String tag) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet resultSet = stm.executeQuery("SELECT tagID FROM tag WHERE tag = '" + tag + "' LIMIT 1");
         if (!resultSet.next()) {
@@ -106,12 +128,11 @@ public class DatabaseController {
 
     /**
      * Search for category with a given id in the database
-     * @param con Connection to the database
      * @param categoryId Id of the category
      * @return The category's name
      * @throws SQLException If there is any SQL errors happening
      */
-    public static String getName(final Connection con, final int categoryId) throws SQLException {
+    public String getName(final int categoryId) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet resultSet = stm.executeQuery("SELECT name FROM category WHERE categoryID = '" + categoryId + "' LIMIT 1");
         if (!resultSet.next()) {
@@ -122,12 +143,11 @@ public class DatabaseController {
 
     /**
      * Search for id of a given category in the database
-     * @param con Connection to the database
      * @param name Category name
      * @return The category's Id
      * @throws SQLException If there is any SQL errors happening
      */
-    public static int getCategoryKey(final Connection con, final String name) throws SQLException {
+    public int getCategoryKey(final String name) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet resultSet = stm.executeQuery("SELECT CategoryId FROM category WHERE Name = '" + name + "' LIMIT 1");
         if (!resultSet.next()) {
@@ -140,11 +160,10 @@ public class DatabaseController {
 
     /**
      * Print the document with the given docId. This is different from printing a Document instance
-     * @param con Connection to the database
      * @param docId Id of the document
      * @throws SQLException If there is any SQL errors happening
      */
-    public static void printDocument(final Connection con, final int docId) throws SQLException {
+    public void printDocument(final int docId) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet rS = stm.executeQuery("SELECT documentName, documentDate, storageAddress, Name AS Category, Topic FROM Document " +
                 "JOIN Category USING(categoryId) JOIN Topic USING(topicId) " +

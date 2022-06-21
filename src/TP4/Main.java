@@ -17,37 +17,38 @@ public class Main {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", user, password);
             System.out.println("Base de donnees connectee !");
-            DatabaseController.initialize(con);
+            DatabaseController dC = DatabaseController.getInstance(con);
+            dC.initialize();
 
             // add documents (Exo A)
             Document doc = new Document("Demande difficile", "2022-06-17", "C:/Users/ArtEfrei/Subvention.pdf", "report", "Subvention ArtEfrei 2022");
             doc.addTag("Association");
             doc.sync(con);
-            DatabaseController.printDocument(con, doc.getDocumentID());
+            dC.printDocument(doc.getDocumentID());
 
             doc = new Document("Le reve artistique", "2022-06-28", "C:/Users/ArtEfrei/Plaquette.pdf", "report", "Plaquette Partenariat ArtEfrei");
             doc.addTag("Association");
             doc.addTag("Etude");
             doc.addTag("Divertissement");
             doc.sync(con);
-            DatabaseController.printDocument(con, doc.getDocumentID());
+            dC.printDocument(doc.getDocumentID());
 
             doc = new Document("De beaux pulls", "2022-08-12", "C:/Users/ArtEfrei/Pulls.pdf", "order","Dossier Sweat ArtEfrei");
             doc.addTag("Association");
             doc.addTag("Divertissement");
             doc.sync(con);
-            DatabaseController.printDocument(con, doc.getDocumentID());
+            dC.printDocument(doc.getDocumentID());
 
             doc = new Document("Changement de tableau", "2022-08-22", "C:/Users/ArtEfrei/SubChange.pdf", "receipt", "Subvention ArtEfrei 2022");
             doc.addTag("Association");
             doc.sync(con);
-            DatabaseController.printDocument(con, doc.getDocumentID());
+            dC.printDocument(doc.getDocumentID());
 
             doc = new Document("Reglements EFREI", "2021-09-01", "C:/Users/EFREI/Regles.pdf", "policy", "Regles EFREI 2021");
             doc.addTag("Etude");
             doc.addTag("Regle");
             doc.sync(con);
-            DatabaseController.printDocument(con, doc.getDocumentID());
+            dC.printDocument(doc.getDocumentID());
 
             String commande = "";
             Statement statement = con.createStatement();
@@ -150,7 +151,7 @@ public class Main {
                                 string = sc.nextLine();
                             }
                             doc.sync(con);
-                            DatabaseController.printDocument(con, doc.getDocumentID());
+                            dC.printDocument(doc.getDocumentID());
                             break;
                         case ("5"): // Exo C.ii & iii
                             System.out.println("Veuillez indiquer l'ID de document a modifier :");
@@ -222,6 +223,7 @@ public class Main {
                                             System.out.println("Tag " + string + " supprime.");
                                         } else {
                                             System.out.println("Tag " + string + " n'existe pas.");
+                                            System.out.println("Tag " + string + " n'existe pas.");
                                         }
                                         string = sc.nextLine();
                                     }
@@ -232,7 +234,7 @@ public class Main {
                             }
                             doc.sync(con);
                             System.out.println(doc);
-                            DatabaseController.printDocument(con, doc.getDocumentID());
+                            dC.printDocument(doc.getDocumentID());
                             break;
                         default:
                             System.out.println("Commande invalide.");

@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.TreeSet;
 import java.util.Set;
 
+
 public class Document {
     private final int documentID;
     private String documentName;
@@ -53,7 +54,7 @@ public class Document {
     /**
      * Create a document with a given ID. Use only for internal methods that requires creation of Document with specific ID.
      * @param documentID Id of the document
-     * @throws Exception
+     * @throws Exception If the Id is greater or equal than the internal counter
      */
     protected Document(final int documentID) throws Exception {
         if (documentID >= compteur) {
@@ -184,6 +185,12 @@ public class Document {
      * @throws SQLException If category and topic are null, or there is any SQL error occurs during the synchronization
      */
     public void sync(final Connection con) throws SQLException {
+        DatabaseController dC;
+        try {
+            dC = DatabaseController.getInstance();
+        } catch (Exception e) {
+            dC = DatabaseController.getInstance(con);
+        }
         if (category == null || topic == null) {
             StringBuilder errorMessage = new StringBuilder("Certains attributs sont nuls : ");
             if (category == null) errorMessage.append("category ");
@@ -191,8 +198,8 @@ public class Document {
             throw new SQLException(errorMessage.toString());
         }
         Statement stm = con.createStatement();
-        int catKey = DatabaseController.getCategoryKey(con, category);
-        int topicKey = DatabaseController.getTopicId(con, topic);
+        int catKey = dC.getCategoryKey(category);
+        int topicKey = dC.getTopicId(topic);
         Set<String> tagList = new TreeSet<>();
 
         // create a document if not exist, else update data in case of key duplicate
@@ -231,7 +238,7 @@ public class Document {
         if(tags.size() > 0) {
             sqlQuery = new StringBuilder("INSERT IGNORE INTO Possede(DocumentId, TagId) VALUES ");
             for (String tag: tags) {
-                int tagKey = DatabaseController.getTagId(con, tag);
+                int tagKey = dC.getTagId(tag);
                 sqlQuery.append("(" + documentID + "," + tagKey + "),");
             }
             sqlQuery.deleteCharAt(sqlQuery.length() - 1);
@@ -268,7 +275,7 @@ public class Document {
             }
             return result;
         } else {
-            throw new SQLException("Aucun résultat trouvé");
+            throw new SQLException("Aucun resultat trouve");
         }
     }
 
