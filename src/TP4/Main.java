@@ -233,7 +233,6 @@ public class Main {
                                     continue;
                             }
                             doc.sync(con);
-                            System.out.println(doc);
                             dC.printDocument(doc.getDocumentID());
                             break;
                         default:
